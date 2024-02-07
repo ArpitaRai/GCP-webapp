@@ -24,13 +24,8 @@ sequelize.sync()
     });
 
 
-// --Health Check Endpoint call--
-// Set Cache-Control globally
 
-app.use((req, res, next) => {
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    next();
-});
+
 // Error handling for JSON parsing
 app.use((error, req, res, next) => {
     if (error instanceof SyntaxError && error.status === 400 && error.message.includes('JSON') && error.type === 'entity.parse.failed' && 'body' in error) {
@@ -39,6 +34,14 @@ app.use((error, req, res, next) => {
     }
     next();
 });
+
+// --Health Check Endpoint call--
+// Set Cache-Control globally
+app.use((req, res, next) => {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    next();
+});
+
 
 routes(app);
 

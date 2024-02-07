@@ -7,7 +7,6 @@ class UserService {
     try {
         const user = await auth(req);
         const currentUser = await User.findOne({where: {userName: user.name}})
-        console.log("currentUser", currentUser);
       if (!currentUser) {
         throw new Error('User not found');
       }
@@ -29,6 +28,7 @@ class UserService {
   async updateCurrentUser(req, res, { first_name, last_name, password }) {
     try {
       const user = await auth(req);
+
       const currentUser = await User.findOne({where: {userName: user.name}})
       //console.log("currentUser", currentUser);
      if (!currentUser) {
@@ -55,7 +55,7 @@ class UserService {
 
   async createUser({ first_name, last_name, password, userName }) {
     try {
-
+      
       const hashedPassword = await bcrypt.hash(password, 10);
 
       const newUser = await User.create({

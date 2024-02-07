@@ -35,17 +35,15 @@ export const getCurrentUser = async (req, res) => {
 export const updateCurrentUser = async (req, res) => {
   try {
     const status = await authRoute(req, res); 
-
-  
     if(status ===200) {
         if (Object.keys(req.body).length === 0) {
             return res.status(400).json({ message: 'Bad Request, Empty request body' });
          }
         const { first_name, last_name, password, userName, id, account_created, account_updated } = req.body;
         if(userName || id || account_created || account_updated){
-            console.log("user is trying to update the system variables like id, account_created, account_updated or username");
+            console.log("user is trying to update inalid fields!");
             return res.status(400).send({
-                message: "User is trying to update the system variables like id, account_created, account_updated or username"
+                message: "User is trying to update the invalid fields!"
             });
     }
     
@@ -68,6 +66,15 @@ export const createUser = async (req, res) => {
     if (validationError) {
       return res.status(400).json({ message: validationError });
     }
+   // Check for additional fields in the request
+   const allowedFields = ['first_name', 'last_name', 'userName', 'password'];
+   const receivedFields = Object.keys(req.body);
+
+   const invalidFields = receivedFields.filter(field => !allowedFields.includes(field));
+   console.log("invalidFields :: ", invalidFields, allowedFields, receivedFields);
+   if (invalidFields.length > 0) {
+     return res.status(400).json({ message: 'Invalid fields!' });
+   }
 
     // Check if user with the email already exists
     const existingUser = await User.findOne({ where: { userName: userName } });
