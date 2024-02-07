@@ -1,6 +1,7 @@
 import userService from '../services/user-service.js';
 import User from '../models/user.js';
 import authRoute from '../middleware/authRoute.js';
+import auth from 'basic-auth';
 
 const validateCreateUserFields = ({ first_name, last_name, password, userName }) => {
   if (!first_name || !last_name || !password || !userName) {
@@ -48,7 +49,7 @@ export const updateCurrentUser = async (req, res) => {
     }
     
     const userResponse = await userService.updateCurrentUser(req, res, { first_name, last_name, password });
-    return res.status(200).json(userResponse);}else {
+    return res.status(204).json(userResponse);}else {
         return res.status(status).send("");
       }
 
@@ -60,7 +61,10 @@ export const updateCurrentUser = async (req, res) => {
 export const createUser = async (req, res) => {
   try {
     const { first_name, last_name, password, userName } = req.body;
-
+    const user = await auth(req);
+    if(user){
+      return res.status(400).json({ message: 'Bad request!' });
+    }
     // Validate fields
     const validationError = validateCreateUserFields({ first_name, last_name, password, userName });
     if (validationError) {
