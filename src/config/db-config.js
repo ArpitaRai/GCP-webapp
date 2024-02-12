@@ -10,13 +10,7 @@ console.log(process.env.DB_DATABASE, process.env.DB_USER, process.env.DB_PASSWOR
 // });
 const sequelize = new Sequelize(process.env.DB_DATABASE || 'nodeexpressmysql', process.env.DB_USER, process.env.DB_PASSWORD, {
     host: process.env.DB_HOST,
-    dialect: 'mysql',
-    pool : {
-        max : process.env.POOL.max,
-        min : process.env.POOL.min,
-        acquire : process.env.POOL.acquire,
-        idle : process.env.POOL.idle
-    },
+    dialect: 'mysql'
         
     //    // Option to create the database if it doesn't exist
     // define: {

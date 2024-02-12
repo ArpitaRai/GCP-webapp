@@ -4,6 +4,12 @@ import authRoute from '../middleware/authRoute.js';
 import auth from 'basic-auth';
 
 const validateCreateUserFields = ({ first_name, last_name, password, userName }) => {
+  const isString = (value) => {
+    return typeof value === 'string' || value instanceof String;
+  };
+  if (!isString(first_name) || !isString(last_name) || !isString(password) || !isString(userName)) {
+    return 'Bad Request, All fields must be strings';
+  }
   if (!first_name || !last_name || !password || !userName) {
     return 'Bad Request, All fields are required';
   }
@@ -28,6 +34,12 @@ const validateCreateUserFields = ({ first_name, last_name, password, userName })
 
 
 const validateUpdateUserFields = ({ first_name, last_name, password }) => {
+  const isString = (value) => {
+    return typeof value === 'string' || value instanceof String;
+  };
+  if (!isString(first_name) || !isString(last_name) || !isString(password) ) {
+    return 'Bad Request, All fields must be strings';
+  }
   if (!first_name || !last_name || !password ) {
     return 'Bad Request, All fields are required';
   }
@@ -153,4 +165,6 @@ export const createUser = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
+
+
 };
