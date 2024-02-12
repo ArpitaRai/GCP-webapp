@@ -2,7 +2,7 @@
 This application has api's to create, get and update users.
 ## Requirements
 
-For development, you will need Node.js and a node global package, and mySql installed in your environment.
+For development, you will need Node.js and a node global package, and mySql installed in your environment
 test
 
 ### Node
