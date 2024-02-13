@@ -13,14 +13,16 @@ describe('/v1/user endpoint', () => {
   let authToken = Buffer.from(`${basicAuthUsername}:${basicAuthPassword}`).toString('base64');;
 
   it('should create an account and validate its existence', async () => {
-    const user = await request.post(getPostUserEndpoint)
-      .send({
-        first_name: 'John',
-        last_name: 'Doe',
-        userName: basicAuthUsername,
-        password: basicAuthPassword,
-    });  
-
+    const userCreationResponse = await request.post(getPostUserEndpoint)
+    .send({
+       first_name: 'John',
+       last_name: 'Doe',
+       userName: basicAuthUsername,
+       password: basicAuthPassword,
+    });
+ 
+ console.log('User Creation Request Body:', userCreationResponse.request.body);
+ console.log('User Creation Response Status:', userCreationResponse.status);
     await new Promise(resolve => setTimeout(resolve, 1000));  // Adjust the delay as needed.
 
     const response = await request.get(getUserEndpoint)
