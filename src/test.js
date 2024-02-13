@@ -37,8 +37,6 @@ describe('/v1/user endpoint', () => {
           userName: basicAuthUsername,
           password: basicAuthPassword,
         });
-      
-       console.log("user response of post:", user.status, user);
 
       const response = await request.get(getUserEndpoint)
         .set('Authorization', `Basic ${authToken}`)
@@ -50,6 +48,7 @@ describe('/v1/user endpoint', () => {
       console.error("Error during user creation:", error);
       throw error; // Re-throw the error to fail the test
     }
+    
   });
   
 
@@ -71,5 +70,14 @@ const getResponse = await request.get(getUserEndpoint)
 expect(getResponse.body.username).to.equal('testuser2@gmail.com');
 expect(getResponse.body.first_name).to.equal('UpdatedJohn');
 expect(getResponse.body.last_name).to.equal('UpdatedDoe');
+  });
+
+  after(async () => {
+    try {
+      await sequelize.close();
+      console.log('Sequelize connection closed successfully');
+    } catch (error) {
+      console.error('Error closing Sequelize connection:', error);
+    }
   });
 });
