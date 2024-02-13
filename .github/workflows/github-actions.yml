@@ -24,7 +24,7 @@ jobs:
         touch .env
         echo "MYSQL_DATABASE=${{vars.MYSQL_DATABASE}}" >> .env
         echo "MYSQL_PASSWORD=${{vars.MYSQL_PASSWORD}}" >> .env
-        echo "MYSQL_USER=arpita" >> .env
+        echo "MYSQL_USER=arpita" >> .env        
 
     - name: Set up MySQL
       uses: ankane/setup-mariadb@v1
