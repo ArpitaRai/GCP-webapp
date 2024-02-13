@@ -1,9 +1,12 @@
 import * as chai from 'chai';
 import supertest from 'supertest';
 import app from './app.js';
+import sequelize from './config/db-config.js';
 
 const { expect } = chai;
 const request = supertest(app);
+
+
 
 describe('/v1/user endpoint', () => {
   const getUserEndpoint = '/v1/user/self';
@@ -11,9 +14,22 @@ describe('/v1/user endpoint', () => {
   const basicAuthUsername = 'testuser2@gmail.com';
   const basicAuthPassword = 'password'
   let authToken = Buffer.from(`${basicAuthUsername}:${basicAuthPassword}`).toString('base64');;
-
+  const ensureUsersTableExists = async () => {
+    try {
+      await sequelize.authenticate();
+      await sequelize.sync();
+      console.log('Table "users" exists or has been created successfully');
+    } catch (error) {
+      console.error('Error ensuring "users" table existence:', error);
+      throw error;
+    }
+  };
+  before(async () => {
+    await ensureUsersTableExists();
+  })
   it('should create an account and validate its existence', async () => {
     try {
+;
       const user = await request.post(getPostUserEndpoint)
         .send({
           first_name: 'John',
@@ -22,7 +38,7 @@ describe('/v1/user endpoint', () => {
           password: basicAuthPassword,
         });
       
-      console.log("user response of post:", user);
+       console.log("user response of post:", user.status, user);
 
       const response = await request.get(getUserEndpoint)
         .set('Authorization', `Basic ${authToken}`)

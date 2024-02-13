@@ -39,6 +39,10 @@ const User = sequelize.define("user",
     //   allowNull: false,
     // },
   
+},{
+  timestamps: true, // Add timestamps to the table
+  createdAt: 'createdAt', // Customize the name of the createdAt column
+  updatedAt: 'updatedAt', // Customize the name of the updatedAt column
 });
 
 export default User;
