@@ -23,9 +23,6 @@ sequelize.sync()
         console.error('Error syncing models with the database:', error);
     });
 
-
-
-
 // Error handling for JSON parsing
 app.use((error, req, res, next) => {
     if (error instanceof SyntaxError && error.status === 400 && error.message.includes('JSON') && error.type === 'entity.parse.failed' && 'body' in error) {
