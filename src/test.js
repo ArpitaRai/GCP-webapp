@@ -72,12 +72,4 @@ expect(getResponse.body.first_name).to.equal('UpdatedJohn');
 expect(getResponse.body.last_name).to.equal('UpdatedDoe');
   });
 
-  after(async () => {
-    try {
-      await sequelize.close();
-      console.log('Sequelize connection closed successfully');
-    } catch (error) {
-      console.error('Error closing Sequelize connection:', error);
-    }
-  });
 });
