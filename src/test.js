@@ -27,7 +27,7 @@ describe('/v1/user endpoint', () => {
     .set('Authorization', `Basic ${authToken}`)
     .expect(200);
   
-    expect(response.body.username).to.equal('testuser2@gmail.com');
+    expect(response.body.userName).to.equal('testuser2@gmail.com');
     expect(response.body).to.have.property('id');
   });
   
@@ -45,12 +45,12 @@ describe('/v1/user endpoint', () => {
 
 
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
 const getResponse = await request.get(getUserEndpoint)
     .set('Authorization', `Basic ${authToken}`)
     .expect(200);
 
-expect(getResponse.body.username).to.equal('testuser2@gmail.com');
+expect(getResponse.body.userName).to.equal('testuser2@gmail.com');
 expect(getResponse.body.first_name).to.equal('UpdatedJohn');
 expect(getResponse.body.last_name).to.equal('UpdatedDoe');
   });
