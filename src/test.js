@@ -10,7 +10,7 @@ describe('/v1/user endpoint', () => {
   const getPostUserEndpoint = '/v1/user';
   const basicAuthUsername = 'testuser2@gmail.com';
   const basicAuthPassword = 'password'
-  let authToken = Buffer.from(`${basicAuthUsername}:${basicAuthPassword}`).toString('base64');;
+  let authToken = Buffer.from(`${basicAuthUsername}:${basicAuthPassword}`).toString('base64');
 
   it('should create an account and validate its existence', async () => {
     const user = await request.post(getPostUserEndpoint)
