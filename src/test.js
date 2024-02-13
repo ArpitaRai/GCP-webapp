@@ -10,7 +10,7 @@ describe('/v1/user endpoint', () => {
   const getPostUserEndpoint = '/v1/user';
   const basicAuthUsername = 'testuser2@gmail.com';
   const basicAuthPassword = 'password'
-  let authToken = Buffer.from(`${basicAuthUsername}:${basicAuthPassword}`).toString('base64');
+  let authToken = Buffer.from(`${basicAuthUsername}:${basicAuthPassword}`).toString('base64');;
 
   it('should create an account and validate its existence', async () => {
     const user = await request.post(getPostUserEndpoint)
@@ -20,6 +20,9 @@ describe('/v1/user endpoint', () => {
         userName: basicAuthUsername,
         password: basicAuthPassword,
     });  
+
+    await new Promise(resolve => setTimeout(resolve, 1000));  // Adjust the delay as needed.
+
     const response = await request.get(getUserEndpoint)
     .set('Authorization', `Basic ${authToken}`)
     .expect(200);
@@ -40,6 +43,9 @@ describe('/v1/user endpoint', () => {
     .set('Authorization', `Basic ${authToken}`)
     .expect(204);
 
+
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
 const getResponse = await request.get(getUserEndpoint)
     .set('Authorization', `Basic ${authToken}`)
     .expect(200);
