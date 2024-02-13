@@ -13,20 +13,27 @@ describe('/v1/user endpoint', () => {
   let authToken = Buffer.from(`${basicAuthUsername}:${basicAuthPassword}`).toString('base64');;
 
   it('should create an account and validate its existence', async () => {
-    const user = await request.post(getPostUserEndpoint)
-      .send({
-        first_name: 'John',
-        last_name: 'Doe',
-        userName: basicAuthUsername,
-        password: basicAuthPassword,
-    });  
-    console.log("user response of post::" ,user);
-    const response = await request.get(getUserEndpoint)
-    .set('Authorization', `Basic ${authToken}`)
-    .expect(200);
-  
-    expect(response.body.username).to.equal('testuser2@gmail.com');
-    expect(response.body).to.have.property('id');
+    try {
+      const user = await request.post(getPostUserEndpoint)
+        .send({
+          first_name: 'John',
+          last_name: 'Doe',
+          userName: basicAuthUsername,
+          password: basicAuthPassword,
+        });
+      
+      console.log("user response of post:", user);
+
+      const response = await request.get(getUserEndpoint)
+        .set('Authorization', `Basic ${authToken}`)
+        .expect(200);
+    
+      expect(response.body.username).to.equal('testuser2@gmail.com');
+      expect(response.body).to.have.property('id');
+    } catch (error) {
+      console.error("Error during user creation:", error);
+      throw error; // Re-throw the error to fail the test
+    }
   });
   
 
