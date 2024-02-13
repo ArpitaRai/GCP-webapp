@@ -20,7 +20,7 @@ describe('/v1/user endpoint', () => {
         userName: basicAuthUsername,
         password: basicAuthPassword,
     });  
-    console.log(user);
+    console.log("user response of post::" ,user);
     const response = await request.get(getUserEndpoint)
     .set('Authorization', `Basic ${authToken}`)
     .expect(200);

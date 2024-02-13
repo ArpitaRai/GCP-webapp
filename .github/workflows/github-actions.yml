@@ -33,7 +33,7 @@ jobs:
 
     - name: Creating DB User
       run: |
-        sudo mysql -D ${{vars.MYSQL_DATABASE}} -e "CREATE USER 'arpita'@localhost IDENTIFIED BY '${{vars.MYSQL_PASSWORD}}';"
+        sudo mysql -D ${{vars.MYSQL_DATABASE}} -e "CREATE USERS 'arpita'@localhost IDENTIFIED BY '${{vars.MYSQL_PASSWORD}}';"
         sudo mysql -D ${{vars.MYSQL_DATABASE}} -e "GRANT ALL PRIVILEGES ON ${{vars.MYSQL_DATABASE}}.* TO 'arpita'@localhost;"
         sudo mysql -D ${{vars.MYSQL_DATABASE}} -e "FLUSH PRIVILEGES;"
 
