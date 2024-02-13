@@ -44,6 +44,5 @@ jobs:
     - name: Run the integration test
       run: npm test
 
-    - name: Exit after tests
-      run: exit 0
+      
    

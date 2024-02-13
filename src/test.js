@@ -71,5 +71,9 @@ expect(getResponse.body.username).to.equal('testuser2@gmail.com');
 expect(getResponse.body.first_name).to.equal('UpdatedJohn');
 expect(getResponse.body.last_name).to.equal('UpdatedDoe');
   });
+  after(() => {
+    // Exit the process after the tests are completed
+    process.exit(0);
+  });
 
 });
