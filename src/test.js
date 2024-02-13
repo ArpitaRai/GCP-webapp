@@ -13,23 +13,19 @@ describe('/v1/user endpoint', () => {
   let authToken = Buffer.from(`${basicAuthUsername}:${basicAuthPassword}`).toString('base64');;
 
   it('should create an account and validate its existence', async () => {
-    const userCreationResponse = await request.post(getPostUserEndpoint)
-    .send({
-       first_name: 'John',
-       last_name: 'Doe',
-       userName: basicAuthUsername,
-       password: basicAuthPassword,
-    });
- 
- console.log('User Creation Request Body:', userCreationResponse.request.body);
- console.log('User Creation Response Status:', userCreationResponse.status);
-    await new Promise(resolve => setTimeout(resolve, 1000));  // Adjust the delay as needed.
-
+    const user = await request.post(getPostUserEndpoint)
+      .send({
+        first_name: 'John',
+        last_name: 'Doe',
+        userName: basicAuthUsername,
+        password: basicAuthPassword,
+    });  
+    console.log(user);
     const response = await request.get(getUserEndpoint)
     .set('Authorization', `Basic ${authToken}`)
     .expect(200);
   
-    expect(response.body.userName).to.equal('testuser2@gmail.com');
+    expect(response.body.username).to.equal('testuser2@gmail.com');
     expect(response.body).to.have.property('id');
   });
   
@@ -45,14 +41,11 @@ describe('/v1/user endpoint', () => {
     .set('Authorization', `Basic ${authToken}`)
     .expect(204);
 
-
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
 const getResponse = await request.get(getUserEndpoint)
     .set('Authorization', `Basic ${authToken}`)
     .expect(200);
 
-expect(getResponse.body.userName).to.equal('testuser2@gmail.com');
+expect(getResponse.body.username).to.equal('testuser2@gmail.com');
 expect(getResponse.body.first_name).to.equal('UpdatedJohn');
 expect(getResponse.body.last_name).to.equal('UpdatedDoe');
   });
