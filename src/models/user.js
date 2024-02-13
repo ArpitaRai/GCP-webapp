@@ -2,7 +2,7 @@ import sequelize from '../config/db-config.js';
 import Sequelize, {DataTypes} from 'sequelize';
 import { v4 as uuidv4 } from 'uuid';
 
-const User = sequelize.define("user",
+const User = sequelize.define("users",
   {
     id: {
       type: Sequelize.INTEGER,
