@@ -103,7 +103,6 @@ export const updateCurrentUser = async (req, res) => {
         const receivedFields = Object.keys(req.body);
 
         const invalidFields = receivedFields.filter(field => !allowedFields.includes(field));
-        console.log("invalidFields :: ", invalidFields, allowedFields, receivedFields);
          if (invalidFields.length > 0) {
          return res.status(400).json({ message: 'Invalid fields!' });
           }
@@ -149,7 +148,6 @@ export const createUser = async (req, res) => {
    const receivedFields = Object.keys(req.body);
 
    const invalidFields = receivedFields.filter(field => !allowedFields.includes(field));
-   console.log("invalidFields :: ", invalidFields, allowedFields, receivedFields);
    if (invalidFields.length > 0) {
      return res.status(400).json({ message: 'Invalid fields!' });
    }

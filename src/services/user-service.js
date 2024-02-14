@@ -66,7 +66,6 @@ class UserService {
         //  account_created: new Date(),
         //  account_updated: new Date(),
       });
-      console.log("newuser:: ",newUser)
 
       return {
         id: newUser.id,
