@@ -11,9 +11,9 @@ const request = supertest(app);
 describe('/v1/user endpoint', () => {
   const getUserEndpoint = '/v1/user/self';
   const getPostUserEndpoint = '/v1/user';
-  const basicAuthUsername = 'testuser2@gmail.com';
+  const basicAuthusername = 'testuser2@gmail.com';
   const basicAuthPassword = 'password'
-  let authToken = Buffer.from(`${basicAuthUsername}:${basicAuthPassword}`).toString('base64');;
+  let authToken = Buffer.from(`${basicAuthusername}:${basicAuthPassword}`).toString('base64');;
   const ensureUsersTableExists = async () => {
     try {
       await sequelize.authenticate();
@@ -34,7 +34,7 @@ describe('/v1/user endpoint', () => {
         .send({
           first_name: 'John',
           last_name: 'Doe',
-          userName: basicAuthUsername,
+          username: basicAuthusername,
           password: basicAuthPassword,
         });
 

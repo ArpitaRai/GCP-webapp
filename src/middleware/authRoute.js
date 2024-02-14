@@ -7,7 +7,7 @@ export const authRoute = async (req, res) => {
   let status = 200;
   const user = await auth(req);
   console.log("user ::", user);
-  const dbuser = await User.findOne({where: {userName: user.name}})
+  const dbuser = await User.findOne({where: {username: user.name}})
   if(dbuser){
     const passwordMatches = await comparePassword(dbuser.password, user.pass);
     //const userId = req.params.id;

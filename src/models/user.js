@@ -11,7 +11,7 @@ const User = sequelize.define("user",
       allowNull: false,
       primaryKey: true,
     },
-    userName: {
+    username: {
       type: Sequelize.STRING,
       allowNull: false,
       unique: true,
@@ -20,29 +20,21 @@ const User = sequelize.define("user",
       type: Sequelize.STRING,
       allowNull: false,
     },
-    firstName: {
+    first_name: {
       type: Sequelize.STRING,
       allowNull: false
 
     },
-    lastName: {
+    last_name: {
       type: Sequelize.STRING,
       allowNull: false
 
     },
-    // account_created: {
-    //   type: Sequelize.DATE,
-    //   allowNull: false,
-    // },
-    // account_updated: {
-    //   type: Sequelize.DATE,
-    //   allowNull: false,
-    // },
   
 },{
   timestamps: true, // Add timestamps to the table
-  createdAt: 'createdAt', // Customize the name of the createdAt column
-  updatedAt: 'updatedAt', // Customize the name of the updatedAt column
+  createdAt: 'account_created', 
+  updatedAt: 'account_updated'
 });
 
 export default User;

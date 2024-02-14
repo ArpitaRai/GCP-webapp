@@ -3,14 +3,14 @@ import User from '../models/user.js';
 import authRoute from '../middleware/authRoute.js';
 import auth from 'basic-auth';
 
-const validateCreateUserFields = ({ first_name, last_name, password, userName }) => {
+const validateCreateUserFields = ({ first_name, last_name, password, username }) => {
   const isString = (value) => {
     return typeof value === 'string' || value instanceof String;
   };
-  if (!isString(first_name) || !isString(last_name) || !isString(password) || !isString(userName)) {
+  if (!isString(first_name) || !isString(last_name) || !isString(password) || !isString(username)) {
     return 'Bad Request, All fields must be strings';
   }
-  if (!first_name || !last_name || !password || !userName) {
+  if (!first_name || !last_name || !password || !username) {
     return 'Bad Request, All fields are required';
   }
   if (!first_name.trim() || !last_name.trim()) {
@@ -18,13 +18,13 @@ const validateCreateUserFields = ({ first_name, last_name, password, userName })
   }
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(userName)) {
+  if (!emailRegex.test(username)) {
     return 'Bad Request, Invalid email address';
   }
   if (
     first_name.trim() === '' ||
     last_name.trim() === '' ||
-    userName.trim() === '' ||
+    username.trim() === '' ||
     password.trim() === ''
   ) {
     return { error: 'Bad Request! All fields must be non-empty.' };
@@ -96,7 +96,7 @@ export const updateCurrentUser = async (req, res) => {
         if (validationError) {
           return res.status(400).json({ message: validationError });
         }
-        const { first_name, last_name, password, userName, id, account_created, account_updated } = req.body;
+        const { first_name, last_name, password, username, id, account_created, account_updated } = req.body;
 
           // Check for additional fields in the request
         const allowedFields = ['first_name', 'last_name', 'password'];
@@ -108,7 +108,7 @@ export const updateCurrentUser = async (req, res) => {
          return res.status(400).json({ message: 'Invalid fields!' });
           }
         
-        if(userName || id || account_created || account_updated){
+        if(username || id || account_created || account_updated){
             console.log("user is trying to update inalid fields!");
             return res.status(400).send({
                 message: "User is trying to update the invalid fields!"
@@ -142,10 +142,10 @@ export const createUser = async (req, res) => {
     if (validationError) {
       return res.status(400).json({ message: validationError });
     }
-    const { first_name, last_name, password, userName } = req.body;
+    const { first_name, last_name, password, username } = req.body;
 
    // Check for additional fields in the request
-   const allowedFields = ['first_name', 'last_name', 'userName', 'password'];
+   const allowedFields = ['first_name', 'last_name', 'username', 'password'];
    const receivedFields = Object.keys(req.body);
 
    const invalidFields = receivedFields.filter(field => !allowedFields.includes(field));
@@ -155,12 +155,12 @@ export const createUser = async (req, res) => {
    }
 
     // Check if user with the email already exists
-    const existingUser = await User.findOne({ where: { userName: userName } });
+    const existingUser = await User.findOne({ where: { username: username } });
     if (existingUser) {
       return res.status(400).json({ message: 'Bad Request, User already exists!' });
     }
 
-    const userResponse = await userService.createUser({ first_name, last_name, password, userName });
+    const userResponse = await userService.createUser({ first_name, last_name, password, username });
     return res.status(201).json(userResponse);
   } catch (error) {
     return res.status(500).json({ error: error.message });
