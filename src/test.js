@@ -29,6 +29,7 @@ describe('User API Endpoint Tests', () => {
     await ensureUsersTableExists();
 
     // Create a test account
+
     const createUserResponse = await request.post(postUserEndpoint)
       .send({
         first_name: 'John',
@@ -60,22 +61,26 @@ describe('User API Endpoint Tests', () => {
   });
 
   it('should update the account and validate the update', async () => {
+    const updatedPassword = 'updatedpassword';
+
     const updateResponse = await request.put(userSelfEndpoint)
       .send({
         first_name: 'UpdatedJohn',
         last_name: 'UpdatedDoe',
-        password: testUserPassword,
+        password: updatedPassword,
       })
       .set('Authorization', `Basic ${authCredentials}`)
       .expect(204);
+     let authCredentialsForUpdate = Buffer.from(`${testUserEmail}:${updatedPassword}`).toString('base64');
 
     const getResponse = await request.get(userSelfEndpoint)
-      .set('Authorization', `Basic ${authCredentials}`)
+      .set('Authorization', `Basic ${authCredentialsForUpdate}`)
       .expect(200);
 
     expect(getResponse.body.username).to.equal(testUserEmail);
     expect(getResponse.body.first_name).to.equal('UpdatedJohn');
     expect(getResponse.body.last_name).to.equal('UpdatedDoe');
+
   });
 
   after(() => {
@@ -83,3 +88,4 @@ describe('User API Endpoint Tests', () => {
     process.exit(0);
   });
 });
+
