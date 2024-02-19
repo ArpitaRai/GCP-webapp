@@ -14,6 +14,9 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
+    - name: Set up Google Cloud credentials
+      run: echo "${{ secrets.GCP_ACCOUNT_JSON }}" > account-gcp.json
+
     - name: Packer init
       run: packer init .
 
