@@ -15,7 +15,11 @@ echo "================================================================="
 echo "Install Node npm and zip"
 echo "================================================================="
 curl --silent --location https://rpm.nodesource.com/setup_18.x | sudo bash -
-sudo yum install nodejs npm unzip -y
+sudo yum install nodejs -y
+
+
+# Install unzip
+sudo yum install unzip -y
 
 echo "================================================================="
 echo "Installing application dependencies"
