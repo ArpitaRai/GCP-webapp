@@ -20,8 +20,11 @@ jobs:
     - name: Packer init
       run: packer init .
 
-    - name: Packer fmt check
+    - name: Packer formmater
       run: packer fmt .
+
+    - name: Packer fmt check
+      run: packer fmt -check .
 
     - name: Packer validate
       run: packer validate .
