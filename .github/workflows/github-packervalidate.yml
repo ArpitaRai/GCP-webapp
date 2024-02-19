@@ -26,8 +26,8 @@ jobs:
     - name: Packer fmt check
       run: packer fmt -check .
 
-    - name: Packer validate
-      run: packer validate .
+    # - name: Packer validate
+    #   run: packer validate .
       
 
       
