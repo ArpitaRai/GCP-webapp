@@ -110,3 +110,14 @@ dist
 .DS_Store
 
 *.tar.gz
+
+# Packer and GCP specific files
+packer_cache/
+*.tfstate
+*.tfstate.*
+*.tfvars
+.terraform/
+credentials.json
+
+# Google Cloud credentials
+account-gcp.json

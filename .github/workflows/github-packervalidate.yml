@@ -1,0 +1,25 @@
+name: packer-validate
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: packer-validate
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Packer fmt check
+      run: packer fmt .
+
+    - name: Packer validate
+      run: packer validate .
+      
+
+      
+   
