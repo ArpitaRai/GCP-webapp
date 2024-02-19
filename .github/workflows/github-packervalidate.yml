@@ -14,6 +14,9 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
+    - name: Packer init
+      run: packer init .
+
     - name: Packer fmt check
       run: packer fmt .
 

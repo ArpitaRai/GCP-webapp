@@ -19,9 +19,6 @@ jobs:
       with:
         node-version: '16'
 
-    - name: Packer fmt check
-      run: packer fmt -check
-
     - name: Setup Environment Variables
       run: |
         touch .env
@@ -39,9 +36,6 @@ jobs:
         sudo mysql -D ${{vars.MYSQL_DATABASE}} -e "CREATE USER 'arpita'@localhost IDENTIFIED BY '${{vars.MYSQL_PASSWORD}}';"
         sudo mysql -D ${{vars.MYSQL_DATABASE}} -e "GRANT ALL PRIVILEGES ON ${{vars.MYSQL_DATABASE}}.* TO 'arpita'@localhost;"
         sudo mysql -D ${{vars.MYSQL_DATABASE}} -e "FLUSH PRIVILEGES;"
-
-    - name: Packer validate
-      run: packer validate packer-image.json
       
     - name: Install dependencies
       run: npm install
