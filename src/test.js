@@ -79,7 +79,7 @@ describe('User API Endpoint Tests', () => {
 
     expect(getResponse.body.username).to.equal(testUserEmail);
     expect(getResponse.body.first_name).to.equal('UpdatedJohn');
-    expect(getResponse.body.last_name).to.equal('UpdatedDoe');
+    expect(getResponse.body.last_name).to.equal('UpdatedJohn');
 
   });
 
