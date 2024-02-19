@@ -5,7 +5,8 @@ packer {
       version = ">= 1.1.4"
     }
   }
-}    source "googlecompute.centos" "centos-source-image" {
+}
+source "googlecompute" "centos-source-image" {
   image_name       = "${var.image_name}-${formatdate("YY-MM-DD-hh-mm-ss", timestamp())}"
   project_id       = var.project_id
   source_image     = var.source_image
