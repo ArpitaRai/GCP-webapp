@@ -15,4 +15,4 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Run the integration test
-      run: npm tes
+      run: npm test
