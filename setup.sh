@@ -38,11 +38,12 @@ echo "================================================================="
 echo "MYSQL_DATABASE=nodeexpressmysql
 MYSQL_HOST=root
 MYSQL_PASSWORD=rootroot
-MYSQL_HOST=localhost" > webapp-main/.env
+MYSQL_HOST=localhost" > .env
 
 echo "================================================================="
 echo "Installing application dependencies and setting it up"
 echo "================================================================="
+sudo chown -R csye6225user:csye6225group /opt/csye6225dir
 sudo mv /tmp/webapp.zip /opt/csye6225dir/webapp.zip
 cd /opt/csye6225dir && sudo unzip webapp.zip
 cd webapp && sudo npm install
