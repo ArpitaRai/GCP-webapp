@@ -1,0 +1,17 @@
+[Unit]
+Description="Node Js Webapp 6225 Service"
+After=network.target
+Wants=postgresd.service
+
+[Service]
+EnvironmentFile=/opt/csye6225dir/.env
+Type=simple
+User=csye6225user
+Restart=always
+RestartSec=500ms
+StartLimitInterval=0
+WorkingDirectory=/opt/csye6225dir
+ExecStart=/usr/bin/npm run dev
+
+[Install]
+WantedBy=cloud-init.target

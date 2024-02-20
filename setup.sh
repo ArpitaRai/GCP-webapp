@@ -5,6 +5,12 @@ echo "================================================================="
 sudo yum update -y
 
 echo "================================================================="
+echo "Creating user group and user"
+echo "================================================================="
+sudo groupadd csye6225group
+sudo useradd -s /bin/false -g csye6225group -d /opt/csye6225dir -m csye6225user
+
+echo "================================================================="
 echo "Installing and Setting up mysql"
 echo "================================================================="
 sudo yum install mariadb-server -y
@@ -29,10 +35,20 @@ sudo systemctl start mariadb
 echo "================================================================="
 echo "Creating .env file"
 echo "================================================================="
-echo "DB_DATABASE=nodeexpressmysql
-DB_USER=root
-DB_PASSWORD=rootroot
-DB_HOST=localhost" > .env
+echo "MYSQL_DATABASE=nodeexpressmysql
+MYSQL_HOST=root
+MYSQL_PASSWORD=rootroot
+MYSQL_HOST=localhost" > webapp-main/.env
+
+echo "================================================================="
+echo "Installing application dependencies and setting it up"
+echo "================================================================="
+sudo mv /tmp/webapp.zip /opt/csye6225dir/webapp.zip
+cd /opt/csye6225dir && sudo unzip webapp.zip
+sudo mv /tmp/webapp.service /etc/systemd/system/webapp.service
+
+sudo chown -R csye6225user:csye6225group /opt/csye6225dir
+
 
 
 echo "=======================ALL DONE==================================="
