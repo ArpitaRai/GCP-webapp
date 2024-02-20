@@ -45,9 +45,13 @@ echo "Installing application dependencies and setting it up"
 echo "================================================================="
 sudo mv /tmp/webapp.zip /opt/csye6225dir/webapp.zip
 cd /opt/csye6225dir && sudo unzip webapp.zip
-sudo mv /tmp/webapp.service /etc/systemd/system/webapp.service
+cd webapp && sudo npm install
+echo "MYSQL_DATABASE=nodeexpressmysql
+MYSQL_HOST=root
+MYSQL_PASSWORD=rootroot
+MYSQL_HOST=localhost" > .env
+sudo chown -R csye6225user:csye6225group /opt/csye6225dir/webapp-main
 
-sudo chown -R csye6225user:csye6225group /opt/csye6225dir
 
 
 
