@@ -51,7 +51,7 @@ describe('User API Endpoint Tests', () => {
       expect(response.body.username).to.equal(testUserEmail);
       expect(response.body).to.have.property('id');
       expect(response.body.first_name).to.equal('John');
-      expect(response.body.last_name).to.equal('Doe');
+      expect(response.body.last_name).to.equal('Doe1');
       expect(response.body).to.have.property('account_created');
       expect(response.body).to.have.property('account_updated');
     } catch (error) {
@@ -79,7 +79,7 @@ describe('User API Endpoint Tests', () => {
 
     expect(getResponse.body.username).to.equal(testUserEmail);
     expect(getResponse.body.first_name).to.equal('UpdatedJohn');
-    expect(getResponse.body.last_name).to.equal('UpdatedJohn');
+    expect(getResponse.body.last_name).to.equal('UpdatedDoe');
 
   });
 
