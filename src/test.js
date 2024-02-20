@@ -14,14 +14,11 @@ describe('User API Endpoint Tests', () => {
   let authCredentials;
 
   const ensureUsersTableExists = async () => {
-    try {
+  
       await sequelize.authenticate();
       await sequelize.sync({ force: true }); // Force synchronization to clean the database
       console.log('Table "users" exists or has been created successfully');
-    } catch (error) {
-      console.error('Error ensuring the existence of the "users" table:', error);
-      throw error;
-    }
+   
   };
 
   beforeEach(async () => {
