@@ -51,6 +51,8 @@ echo "================================================================="
 
 sudo chown -R csye6225user:csye6225group /opt/csye6225dir
 sudo chmod -R 700 /opt/csye6225dir
+sudo chmod -R +rx /opt/csye6225dir
+
 sudo mv /tmp/webapp.zip /opt/csye6225dir/webapp.zip
 cd /opt/csye6225dir && sudo unzip webapp.zip
 sudo npm install
