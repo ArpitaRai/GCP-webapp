@@ -36,14 +36,6 @@ sudo systemctl start mariadb
 sudo systemctl enable mariadb
 sudo systemctl status mariadb
 
-echo "================================================================="
-echo "Creating .env file"
-echo "================================================================="
-
-echo "MYSQL_DATABASE=nodeexpressmysql
-MYSQL_USER=root
-MYSQL_PASSWORD=rootroot
-MYSQL_HOST=localhost" | sudo tee .env
 
 echo "================================================================="
 echo "Installing application dependencies and setting it up"
@@ -56,6 +48,16 @@ sudo chmod -R +rx /opt/csye6225dir
 sudo mv /tmp/webapp.zip /opt/csye6225dir/webapp.zip
 cd /opt/csye6225dir && sudo unzip webapp.zip
 sudo npm install
+
+
+echo "================================================================="
+echo "Creating .env file"
+echo "================================================================="
+
+echo "MYSQL_DATABASE=nodeexpressmysql
+MYSQL_USER=root
+MYSQL_PASSWORD=rootroot
+MYSQL_HOST=localhost" | sudo tee .env
 
 sudo mv /tmp/webapp.service /etc/systemd/system/webapp.service
 
