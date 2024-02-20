@@ -51,7 +51,10 @@ echo "MYSQL_DATABASE=nodeexpressmysql
 MYSQL_HOST=root
 MYSQL_PASSWORD=rootroot
 MYSQL_HOST=localhost" > .env
-sudo chown -R csye6225user:csye6225group /opt/csye6225dir/webapp-main
+pwd
+sudo mv /tmp/webapp.service /etc/systemd/system/webapp.service
+
+sudo chown -R csye6225user:csye6225group /opt/csye6225dir
 
 
 
