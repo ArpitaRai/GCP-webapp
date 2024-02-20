@@ -77,9 +77,9 @@ describe('User API Endpoint Tests', () => {
 
   });
 
-  after(() => {
-    // Exit the process after the tests are completed
-    process.exit(0);
-  });
+  // after(() => {
+  //   // Exit the process after the tests are completed
+  //   process.exit(0);
+  // });
 });
 
