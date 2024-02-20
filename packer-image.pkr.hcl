@@ -19,16 +19,18 @@ source "googlecompute" "centos-source-image" {
 build {
   sources = ["source.googlecompute.centos-source-image"]
 
-  provisioner "shell" {
-    inline = [
-      "sudo yum update -y",
-      "sudo yum install nginx -y",
-      "sudo yum install -y unzip",
-      "sudo yum clean all"
-    ]
+  provisioner "file" {
+    source      = "./webapp.zip"
+    destination = "/tmp/webapp.zip"
+  }
+
+  provisioner "file" {
+    source      = "./webapp.service"
+    destination = "/tmp/webapp.service"
   }
 
   provisioner "shell" {
     script = "setup.sh"
   }
+
 }
