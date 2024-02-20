@@ -43,7 +43,7 @@ describe('User API Endpoint Tests', () => {
   });
 
   it('should create an account and validate its existence', async () => {
-    try {
+   
       const response = await request.get(userSelfEndpoint)
         .set('Authorization', `Basic ${authCredentials}`)
         .expect(200);
@@ -54,10 +54,7 @@ describe('User API Endpoint Tests', () => {
       expect(response.body.last_name).to.equal('Doe1');
       expect(response.body).to.have.property('account_created');
       expect(response.body).to.have.property('account_updated');
-    } catch (error) {
-      console.error("Error during the creation of a user account:", error);
-      throw error; // Re-throw the error to fail the test
-    }
+    
   });
 
   it('should update the account and validate the update', async () => {
