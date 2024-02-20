@@ -43,7 +43,7 @@ echo "================================================================="
 echo "MYSQL_DATABASE=nodeexpressmysql
 MYSQL_USER=root
 MYSQL_PASSWORD=rootroot
-MYSQL_HOST=localhost" > .env
+MYSQL_HOST=localhost" | sudo tee .env
 
 echo "================================================================="
 echo "Installing application dependencies and setting it up"
