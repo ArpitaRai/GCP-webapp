@@ -6,7 +6,7 @@ Wants=postgresd.service
 [Service]
 EnvironmentFile=/opt/csye6225dir/.env
 Type=simple
-User=csye6225user
+User=csye6225
 Restart=always
 RestartSec=500ms
 StartLimitInterval=0

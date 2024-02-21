@@ -65,7 +65,7 @@ echo "================================================================="
 
 sudo mv /tmp/webapp.service /etc/systemd/system/webapp.service || { echo "Failed to move webapp.service . Exiting."; exit 1; }
 
-cho "================================================================="
+echo "================================================================="
 echo "Creating user and changing directory ownership"
 echo "================================================================="
 sudo adduser csye6225 --shell /usr/sbin/nologin || { echo "Failed to add csye6225 user. Exiting."; exit 1; }
