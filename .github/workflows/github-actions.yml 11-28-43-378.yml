@@ -1,7 +1,7 @@
-name: Packer Build Custom Image
+name: webapp-build
 
 on:
-  push:
+  pull_request:
     branches:
       - main
 
@@ -13,9 +13,6 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
-      
-    - name: Making zip of the project
-      run: zip -r webapp.zip .
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
@@ -42,43 +39,6 @@ jobs:
       
     - name: Install dependencies
       run: npm install
-
-    - name: Run integration test
-      run: npm test
-
-    - id: 'auth'
-      uses: 'google-github-actions/auth@v2'
-      with:
-        credentials_json: '${{ secrets.GCP_ACCOUNT_JSON }}'
-
-    - name: 'Set up Cloud SDK'
-      uses: 'google-github-actions/setup-gcloud@v2'
-
-    - name: 'Use gcloud CLI'
-      run: 'gcloud info'
-      
-    - name: Setting up `packer`
-      uses: hashicorp/setup-packer@main
-      id: setup
-      with:
-          version: "latest"
-      
-    - name: Initialize packer
-      id: init
-      run: packer init .
-  
-    - name : Format Packer
-      id: format
-      run: packer fmt -check=true .
-      
-    - name: Run packer validate
-      id: validate
-      run: packer validate .
-
-    - name: Build Packer
-      id: build
-      run: packer build .
-
 
 
       

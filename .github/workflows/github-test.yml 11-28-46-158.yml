@@ -1,21 +1,18 @@
-name: Packer Build Custom Image
+name: integration-test
 
 on:
-  push:
+  pull_request:
     branches:
       - main
 
 jobs:
   build:
-    name: webapp-build
+    name: integration-test
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
-      
-    - name: Making zip of the project
-      run: zip -r webapp.zip .
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
@@ -39,47 +36,13 @@ jobs:
         sudo mysql -D ${{vars.MYSQL_DATABASE}} -e "CREATE USER 'arpita'@localhost IDENTIFIED BY '${{vars.MYSQL_PASSWORD}}';"
         sudo mysql -D ${{vars.MYSQL_DATABASE}} -e "GRANT ALL PRIVILEGES ON ${{vars.MYSQL_DATABASE}}.* TO 'arpita'@localhost;"
         sudo mysql -D ${{vars.MYSQL_DATABASE}} -e "FLUSH PRIVILEGES;"
+
       
     - name: Install dependencies
       run: npm install
 
-    - name: Run integration test
+    - name: Run the integration test
       run: npm test
-
-    - id: 'auth'
-      uses: 'google-github-actions/auth@v2'
-      with:
-        credentials_json: '${{ secrets.GCP_ACCOUNT_JSON }}'
-
-    - name: 'Set up Cloud SDK'
-      uses: 'google-github-actions/setup-gcloud@v2'
-
-    - name: 'Use gcloud CLI'
-      run: 'gcloud info'
-      
-    - name: Setting up `packer`
-      uses: hashicorp/setup-packer@main
-      id: setup
-      with:
-          version: "latest"
-      
-    - name: Initialize packer
-      id: init
-      run: packer init .
-  
-    - name : Format Packer
-      id: format
-      run: packer fmt -check=true .
-      
-    - name: Run packer validate
-      id: validate
-      run: packer validate .
-
-    - name: Build Packer
-      id: build
-      run: packer build .
-
-
 
       
    
