@@ -8,7 +8,7 @@ packer {
 }
 source "googlecompute" "centos-source-image" {
   image_name   = "${var.image_name}-${formatdate("YY-MM-DD-hh-mm-ss", timestamp())}"
-  project_id   = ""
+  project_id   = var.project_id
   source_image = var.source_image
   ssh_username = var.ssh_username
   region       = var.region
