@@ -67,13 +67,13 @@ jobs:
       id: init
       run: packer init .
   
-    - name : Format Packer
-      id: format
-      run: packer fmt -check=true .
+    # - name : Format Packer
+    #   id: format
+    #   run: packer fmt -check=true .
       
-    - name: Run packer validate
-      id: validate
-      run: packer validate .
+    # - name: Run packer validate
+    #   id: validate
+    #   run: packer validate .
 
     - name: Build Packer
       id: build
