@@ -14,21 +14,21 @@ sudo yum install nodejs -y || { echo "Failed to install Node.js. Exiting."; exit
 sudo yum install unzip -y || { echo "Failed to install unzip. Exiting."; exit 1; }
 
 
-echo "================================================================="
-echo "Installing and Setting up mysql"
-echo "================================================================="
+# echo "================================================================="
+# echo "Installing and Setting up mysql"
+# echo "================================================================="
 
-sudo yum install mariadb-server -y || { echo "Failed to install MariaDB server. Exiting."; exit 1; }
-sudo systemctl start mariadb || { echo "Failed to start MariaDB. Exiting."; exit 1; }
-sudo mysql -uroot -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'rootroot';FLUSH PRIVILEGES;CREATE DATABASE nodeexpressmysql;" || { echo "Failed to configure MariaDB. Exiting."; exit 1; }
+# sudo yum install mariadb-server -y || { echo "Failed to install MariaDB server. Exiting."; exit 1; }
+# sudo systemctl start mariadb || { echo "Failed to start MariaDB. Exiting."; exit 1; }
+# sudo mysql -uroot -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'rootroot';FLUSH PRIVILEGES;CREATE DATABASE nodeexpressmysql;" || { echo "Failed to configure MariaDB. Exiting."; exit 1; }
 
-echo "================================================================="
-echo "Run mariadb"
-echo "================================================================="
+# echo "================================================================="
+# echo "Run mariadb"
+# echo "================================================================="
 
-sudo systemctl start mariadb || { echo "Failed to start MariaDB. Exiting."; exit 1; }
-sudo systemctl enable mariadb || { echo "Failed to enable MariaDB. Exiting."; exit 1; }
-sudo systemctl status mariadb
+# sudo systemctl start mariadb || { echo "Failed to start MariaDB. Exiting."; exit 1; }
+# sudo systemctl enable mariadb || { echo "Failed to enable MariaDB. Exiting."; exit 1; }
+# sudo systemctl status mariadb
 
 echo "================================================================="
 echo "Create directory : /opt/csye6225dir"
@@ -50,14 +50,14 @@ echo "================================================================="
 sudo npm install || { echo "Failed to install npm . Exiting."; exit 1; }
 
 
-echo "================================================================="
-echo "Creating .env file"
-echo "================================================================="
+# echo "================================================================="
+# echo "Creating .env file"
+# echo "================================================================="
 
-echo "MYSQL_DATABASE=nodeexpressmysql
-MYSQL_USER=root
-MYSQL_PASSWORD=rootroot
-MYSQL_HOST=localhost" | sudo tee .env
+# echo "MYSQL_DATABASE=nodeexpressmysql
+# MYSQL_USER=root
+# MYSQL_PASSWORD=rootroot
+# MYSQL_HOST=localhost" | sudo tee .env
 
 echo "================================================================="
 echo "Move webapp service file"
@@ -65,20 +65,20 @@ echo "================================================================="
 
 sudo mv /tmp/webapp.service /etc/systemd/system/webapp.service || { echo "Failed to move webapp.service . Exiting."; exit 1; }
 
-echo "================================================================="
-echo "Creating user and changing directory ownership"
-echo "================================================================="
-sudo adduser csye6225 --shell /usr/sbin/nologin || { echo "Failed to add csye6225 user. Exiting."; exit 1; }
-sudo chown -R csye6225:csye6225 /opt/csye6225dir || { echo "Failed to change directory permissions. Exiting."; exit 1; }
-sudo chmod -R 744 /opt/csye6225dir || { echo "Failed to change directory permissions. Exiting."; exit 1; }
+# echo "================================================================="
+# echo "Creating user and changing directory ownership"
+# echo "================================================================="
+# sudo adduser csye6225 --shell /usr/sbin/nologin || { echo "Failed to add csye6225 user. Exiting."; exit 1; }
+# sudo chown -R csye6225:csye6225 /opt/csye6225dir || { echo "Failed to change directory permissions. Exiting."; exit 1; }
+# sudo chmod -R 744 /opt/csye6225dir || { echo "Failed to change directory permissions. Exiting."; exit 1; }
 
-echo "================================================================="
-echo "Run the application"
-echo "================================================================="
+# echo "================================================================="
+# echo "Run the application"
+# echo "================================================================="
 
-sudo systemctl daemon-reload
-sudo systemctl enable webapp.service
-sudo systemctl start webapp.service
+# sudo systemctl daemon-reload
+# sudo systemctl enable webapp.service
+# sudo systemctl start webapp.service
 
 echo "=======================ALL DONE==================================="
 
