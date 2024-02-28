@@ -4,7 +4,7 @@ After=network.target
 Wants=mysqld.service
 
 [Service]
-EnvironmentFile=/opt/csye6225dir/.env
+EnvironmentFile=/opt/.env
 Type=simple
 User=csye6225
 Restart=always
