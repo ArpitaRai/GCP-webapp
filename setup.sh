@@ -6,6 +6,13 @@ echo "================================================================="
 sudo yum update -y || { echo "Failed to update packages. Exiting."; exit 1; }
 
 echo "================================================================="
+echo "Installing the Ops Agent"
+echo "================================================================="
+
+curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh || { echo "Failed to download the Ops Agent installation script. Exiting."; exit 1; }
+sudo bash add-google-cloud-ops-agent-repo.sh --also-install || { echo "Failed to install the Ops Agent. Exiting."; exit 1; }
+
+echo "================================================================="
 echo "Install Node and unzip"
 echo "================================================================="
 
