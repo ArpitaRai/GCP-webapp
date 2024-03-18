@@ -1,0 +1,19 @@
+logging:
+  receivers:
+    my-app-receiver:
+      type: files
+      include_paths:
+        - /var/log/webapp/csye6225.log 
+      record_log_file_path: true
+
+  processors:
+    my-app-processor:
+      type: parse_json
+      time_key: timestamp 
+      time_format: "YYYY-MM-DD hh:mm:ss A"  
+
+  service:
+    pipelines:
+      default_pipeline:
+        receivers: [my-app-receiver]
+        processors: [my-app-processor]

@@ -1,18 +1,19 @@
 import User from "../models/user.js";
 import auth from "basic-auth";
 import { comparePassword } from "../utils/passwordUtils.js";
+import logger from "../config/logger.js";
 
 export const authRoute = async (req, res) => {
-  console.log("Validating user authentication and access to the API");
+  logger.info("Validating user authentication and access to the API");
   let status = 200;
   const user = await auth(req);
-  console.log("user ::", user);
+  logger.info("User:", user);
   const dbuser = await User.findOne({where: {username: user.name}})
   if(dbuser){
     const passwordMatches = await comparePassword(dbuser.password, user.pass);
     //const userId = req.params.id;
     if(! passwordMatches){
-      console.log("User authentication failed due to password mismatch");
+      logger.error("User authentication failed due to password mismatch");
       status = 401;
     }
     // else if(userId && userId != dbuser.id){
@@ -21,12 +22,12 @@ export const authRoute = async (req, res) => {
     // }
   }
   else{
-    console.log("User doesn't exists");
+    logger.error("User doesn't exist");
     status = 401;
     return status;
   }
   if(status === 200)
-  console.log("User authenticated and validated the access to this API");
+  logger.info("User authenticated and validated access to this API");
   return status;
 };
 

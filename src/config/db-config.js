@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import { Sequelize } from 'sequelize';
+import logger from './logger.js';
 
 dotenv.config();
 
@@ -12,19 +13,19 @@ const sequelize = new Sequelize(process.env.MYSQL_DATABASE || 'nodeexpressmysql'
 // Sync the database and create tables if they don't exist
 sequelize.sync({ force: process.env.DB_FORCE_SYNC === 'true' })
     .then(() => {
-        console.log('Database synchronized successfully');
+        logger.info('Database synchronized successfully');
     })
     .catch((error) => {
-        console.error('Error syncing database:', error);
+        logger.fatal('Error syncing database:', error);
     });
 
 
 sequelize.authenticate()
 .then(()=>{
-    console.log("connected . . .")
+    logger.info("connected . . .")
 })
 .catch(err=>{
-    console.log("Error :: ", err);
+    logger.fatal("Error :: ", err);
 })
 
 

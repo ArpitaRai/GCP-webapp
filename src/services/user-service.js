@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import  User  from '../models/user.js';
 import auth from 'basic-auth';
+import logger from '../config/logger.js';
 
 class UserService {
   async getCurrentUser(req, res) {
@@ -20,7 +21,7 @@ class UserService {
         account_updated: currentUser.account_updated,
       };
     } catch (error) {
-      console.error(error);
+      logger.error('Error in getCurrentUser:', error.message);
       throw new Error('Internal Server Error');
     }
   }
@@ -30,7 +31,6 @@ class UserService {
       const user = await auth(req);
 
       const currentUser = await User.findOne({where: {username: user.name}})
-      //console.log("currentUser", currentUser);
      if (!currentUser) {
       throw new Error('User not found');
       }
@@ -40,7 +40,7 @@ class UserService {
       if(last_name){currentUser.last_name = last_name;}
       
       if (password && password.trim() !== '') {
-        console.log("password :: ", password);
+        logger.info('Updating password for user:', currentUser.username);
         currentUser.password = await bcrypt.hash(password, 10);
       }
 
@@ -48,7 +48,7 @@ class UserService {
       await currentUser.save();
       return ({ message: 'User details updated successfully' });
     } catch (error) {
-      console.error(error);
+      logger.error('Error in updateCurrentUser:', error.message);
       throw new Error('Internal Server Error');
     }
   }
@@ -76,7 +76,7 @@ class UserService {
         account_updated: newUser.account_updated,
       };
     } catch (error) {
-      console.error(error);
+      logger.error('Error in createUser:', error.message);
       throw new Error('Internal Server Error');
     }
   }

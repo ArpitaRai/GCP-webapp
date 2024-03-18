@@ -2,6 +2,7 @@ import * as chai from 'chai';
 import supertest from 'supertest';
 import app from './app.js';
 import sequelize from './config/db-config.js';
+import logger from './config/logger.js';
 
 const { expect } = chai;
 const request = supertest(app);
@@ -17,7 +18,7 @@ describe('User API Endpoint Tests', () => {
   
       await sequelize.authenticate();
       await sequelize.sync({ force: true }); // Force synchronization to clean the database
-      console.log('Table "users" exists or has been created successfully');
+      logger.info('Table "users" exists or has been created successfully');
    
   };
 

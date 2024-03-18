@@ -2,6 +2,7 @@ import userService from '../services/user-service.js';
 import User from '../models/user.js';
 import authRoute from '../middleware/authRoute.js';
 import auth from 'basic-auth';
+import logger from '../config/logger.js';
 
 const validateCreateUserFields = ({ first_name, last_name, password, username }) => {
   const isString = (value) => {
@@ -62,7 +63,7 @@ export const getCurrentUser = async (req, res) => {
       return res.status(400).end();
     }
     if (req.get('Content-Length') && parseInt(req.get('Content-Length')) !== 0) {
-      console.error('Invalid Content-Length for GET request');
+      logger.error('Invalid Content-Length for GET request');
       return res.status(400).send();
     }
     const status = await authRoute(req, res); 
@@ -73,6 +74,7 @@ export const getCurrentUser = async (req, res) => {
         return res.status(status).send("");
       }
   } catch (error) {
+    logger.error('Error in getCurrentUser:', error.message);
     return res.status(500).json({ error: error.message });
   }
 };
@@ -94,6 +96,7 @@ export const updateCurrentUser = async (req, res) => {
        
         const validationError = validateUpdateUserFields(req.body);
         if (validationError) {
+          logger.error('Validation error in updateCurrentUser:', validationError);
           return res.status(400).json({ message: validationError });
         }
         const { first_name, last_name, password, username, id, account_created, account_updated } = req.body;
@@ -104,11 +107,12 @@ export const updateCurrentUser = async (req, res) => {
 
         const invalidFields = receivedFields.filter(field => !allowedFields.includes(field));
          if (invalidFields.length > 0) {
+          logger.error('Invalid fields in updateCurrentUser:', invalidFields);
          return res.status(400).json({ message: 'Invalid fields!' });
           }
         
         if(username || id || account_created || account_updated){
-            console.log("user is trying to update inalid fields!");
+            logger.error('User is trying to update invalid fields in updateCurrentUser');
             return res.status(400).send({
                 message: "User is trying to update the invalid fields!"
             });
@@ -120,6 +124,7 @@ export const updateCurrentUser = async (req, res) => {
       }
 
   } catch (error) {
+    logger.error('Error in updateCurrentUser:', error.message);
     return res.status(500).json({ error: error.message });
   }
 };
@@ -131,7 +136,7 @@ export const createUser = async (req, res) => {
     }
     const user = await auth(req);
     if (user) {
-      console.log("User is authenticated:", user);
+      logger.error('User is authenticated in createUser:', user);
       return res.status(400).json({ message: 'Bad request! Authentication is not allowed for this operation.' });
     }
    
@@ -139,6 +144,7 @@ export const createUser = async (req, res) => {
        
     const validationError = validateCreateUserFields(req.body);
     if (validationError) {
+      logger.error('Validation error in createUser:', validationError);
       return res.status(400).json({ message: validationError });
     }
     const { first_name, last_name, password, username } = req.body;
@@ -149,18 +155,21 @@ export const createUser = async (req, res) => {
 
    const invalidFields = receivedFields.filter(field => !allowedFields.includes(field));
    if (invalidFields.length > 0) {
+    logger.error('Invalid fields in createUser:', invalidFields);
      return res.status(400).json({ message: 'Invalid fields!' });
    }
 
     // Check if user with the email already exists
     const existingUser = await User.findOne({ where: { username: username } });
     if (existingUser) {
+      logger.error('User already exists in createUser:', username);
       return res.status(400).json({ message: 'Bad Request, User already exists!' });
     }
 
     const userResponse = await userService.createUser({ first_name, last_name, password, username });
     return res.status(201).json(userResponse);
   } catch (error) {
+    logger.error('Error in createUser', error.message);
     return res.status(500).json({ error: error.message });
   }
 

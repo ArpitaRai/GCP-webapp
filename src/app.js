@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import routes from './routes/index.js';
 import sequelize from './config/db-config.js';
+import logger from './config/logger.js';
 
 const app = express();
 
@@ -17,10 +18,10 @@ app.use(express.urlencoded({extended:true}));
 
 sequelize.sync()
     .then(() => {
-        console.log('Database connected and models synchronized');
+        logger.info('Database connected and models synchronized');
     })
     .catch((error) => {
-        console.error('Error syncing models with the database:', error);
+        logger.error('Error syncing models with the database:', error);
     });
 
 // Error handling for JSON parsing
@@ -47,7 +48,7 @@ const PORT = process.env.PORT || 8080;
 
 // server
 app.listen(PORT,()=> {
-    console.log(`Server is running on PORT number: ${PORT}`)
+    logger.info(`Server is running on PORT number: ${PORT}`);
 })
 
 export default app;

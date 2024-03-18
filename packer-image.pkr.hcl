@@ -29,6 +29,11 @@ build {
     destination = "/tmp/webapp.service"
   }
 
+  provisioner "file" {
+    source      = "./logging.yml"
+    destination = "/tmp/logging.yml"
+  }
+
   provisioner "shell" {
     script = "setup.sh"
   }
