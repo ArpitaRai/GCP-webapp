@@ -22,7 +22,7 @@ var logger = winston.createLogger({
   ),
   transports: [
     new winston.transports.Console(),
-    new winston.transports.File({ filename: '/var/log/webapp/csye6225.log' })
+    new winston.transports.File({ filename: 'csye6225.log' })
   ]
 });
 
