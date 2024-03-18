@@ -63,6 +63,21 @@ echo "Installing application dependencies and setting it up"
 echo "================================================================="
 sudo npm install || { echo "Failed to install npm . Exiting."; exit 1; }
 
+echo "================================================================="
+echo "Create directory: /var/log/webapp"
+echo "================================================================="
+sudo mkdir -p /var/log/webapp || { echo "Failed to create /var/log/webapp. Exiting."; exit 1; }
+
+echo "================================================================="
+echo "Changing ownership of /var/log/webapp to csye6225 user"
+echo "================================================================="
+sudo chown -R csye6225:csye6225 /var/log/webapp || { echo "Failed to change directory permissions. Exiting."; exit 1; }
+
+echo "================================================================="
+echo "Changing permissions of /var/log/webapp directory"
+echo "================================================================="
+sudo chmod -R 744 /var/log/webapp || { echo "Failed to change directory permissions. Exiting."; exit 1; }
+
 
 # echo "================================================================="
 # echo "Creating .env file"
