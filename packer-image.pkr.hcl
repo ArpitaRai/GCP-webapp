@@ -30,8 +30,8 @@ build {
   }
 
   provisioner "file" {
-    source      = "./logging.yml"
-    destination = "/tmp/logging.yml"
+    source      = "./config.yml"
+    destination = "/tmp/config.yml"
   }
 
   provisioner "shell" {
