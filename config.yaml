@@ -16,16 +16,9 @@ logging:
       fields:
         severity:
           move_from: jsonPayload.severity
-    extract_structure:
-      type: parse_regex
-      field: message
-      regex: "^\[(?<timestamp>[^\]]+)\] \[(?<severity>[^\]]+)\] \[(?<logger>[^\]]+)\] (?<message>.*)$"
-      time_key: timestamp
-      time_format: "%Y/%m/%d %H:%M:%S"
-      severity_key: severity # Specify the key for severity extraction
 
   service:
     pipelines:
       default_pipeline:
         receivers: [my-app-receiver]
-        processors: [my-app-processor, move_severity, extract_structure]
+        processors: [my-app-processor, move_severity]

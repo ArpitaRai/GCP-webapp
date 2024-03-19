@@ -101,6 +101,10 @@ echo "Copying Ops Agent configuration file"
 echo "================================================================="
 sudo cp /tmp/config.yaml /etc/google-cloud-ops-agent/config.yaml || { echo "Failed to copy Ops Agent configuration file. Exiting."; exit 1; }
 # sudo chmod 644 /etc/google-cloud-ops-agent/config.yaml || { echo "Failed to set permissions for Ops Agent configuration file. Exiting."; exit 1; }
+
+echo "================================================================="
+echo "Re-starting Ops Agent configuration file"
+echo "================================================================="
 sudo systemctl restart google-cloud-ops-agent || { echo "Failed to restart Ops Agent service. Exiting."; exit 1; }
 
 echo "================================================================="
