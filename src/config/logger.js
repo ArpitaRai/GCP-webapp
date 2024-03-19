@@ -29,21 +29,37 @@
 
 
 //const winston = require("winston");
-import { transports, format } from "winston";
+// import { transports, format } from "winston";
  
-const customFormat = format.printf(({ timestamp, level, message }) => {
-  return `(${timestamp}) - [${level.toUpperCase()}] - "${message}"`;
-});
+// const customFormat = format.printf(({ timestamp, level, message }) => {
+//   return `(${timestamp}) - [${level.toUpperCase()}] - "${message}"`;
+// });
  
+// const logger = winston.createLogger({
+//     level: "info",
+//     format: format.combine(
+//         format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+//         customFormat
+//     ),
+//     transports: [
+//       // new winston.transports.Console(),
+//       process.env.ENV === 'dev' ? new transports.File({ filename: "./logs/webapp.log" }) : new transports.File({  filename: '../../var/log/webapp/csye6225.log' }),
+//     ]
+// });
+// export default logger;
+
 const logger = winston.createLogger({
-    level: "info",
-    format: format.combine(
-        format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
-        customFormat
-    ),
-    transports: [
-      // new winston.transports.Console(),
-      process.env.ENV === 'dev' ? new transports.File({ filename: "./logs/webapp.log" }) : new transports.File({  filename: '../../var/log/webapp/csye6225.log' }),
-    ]
+  level: 'info', // Default severity level for Winston
+  format: winston.format.combine(
+    winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+    winston.format.json() // Output logs in JSON format
+  ),
+  transports: [
+    new winston.transports.Console(), // Output logs to console
+    process.env.ENV === 'dev'
+      ? new winston.transports.File({ filename: './logs/webapp.log' })
+      : new winston.transports.File({ filename: '../../var/log/webapp/csye6225.log' })
+  ]
 });
+
 export default logger;
