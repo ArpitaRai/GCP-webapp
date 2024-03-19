@@ -6,20 +6,6 @@ echo "================================================================="
 sudo yum update -y || { echo "Failed to update packages. Exiting."; exit 1; }
 
 echo "================================================================="
-echo "Installing the Ops Agent"
-echo "================================================================="
-
-curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh || { echo "Failed to download the Ops Agent installation script. Exiting."; exit 1; }
-sudo bash add-google-cloud-ops-agent-repo.sh --also-install || { echo "Failed to install the Ops Agent. Exiting."; exit 1; }
-
-echo "================================================================="
-echo "Copying Ops Agent configuration file"
-echo "================================================================="
-sudo cp /tmp/config.yml /etc/google-cloud-ops-agent/config.yml || { echo "Failed to copy Ops Agent configuration file. Exiting."; exit 1; }
-sudo chmod 644 /etc/google-cloud-ops-agent/config.yml || { echo "Failed to set permissions for Ops Agent configuration file. Exiting."; exit 1; }
-sudo systemctl restart google-cloud-ops-agent || { echo "Failed to restart Ops Agent service. Exiting."; exit 1; }
-
-echo "================================================================="
 echo "Install Node and unzip"
 echo "================================================================="
 
@@ -102,13 +88,28 @@ echo "Changing permissions of /var/log/webapp directory"
 echo "================================================================="
 sudo chmod -R 744 /var/log/webapp || { echo "Failed to change directory permissions. Exiting."; exit 1; }
 
+# echo "================================================================="
+# echo "Run the application"
+# echo "================================================================="
+
+# sudo systemctl daemon-reload
+# sudo systemctl enable webapp.service
+# sudo systemctl start webapp.service
+
 echo "================================================================="
-echo "Run the application"
+echo "Installing the Ops Agent"
 echo "================================================================="
 
-sudo systemctl daemon-reload
-sudo systemctl enable webapp.service
-sudo systemctl start webapp.service
+curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh || { echo "Failed to download the Ops Agent installation script. Exiting."; exit 1; }
+sudo bash add-google-cloud-ops-agent-repo.sh --also-install || { echo "Failed to install the Ops Agent. Exiting."; exit 1; }
+
+echo "================================================================="
+echo "Copying Ops Agent configuration file"
+echo "================================================================="
+sudo cp /tmp/config.yml /etc/google-cloud-ops-agent/config.yml || { echo "Failed to copy Ops Agent configuration file. Exiting."; exit 1; }
+# sudo chmod 644 /etc/google-cloud-ops-agent/config.yml || { echo "Failed to set permissions for Ops Agent configuration file. Exiting."; exit 1; }
+sudo systemctl restart google-cloud-ops-agent || { echo "Failed to restart Ops Agent service. Exiting."; exit 1; }
+
 
 echo "=======================ALL DONE==================================="
 
