@@ -17,7 +17,7 @@ echo "Copying Ops Agent configuration file"
 echo "================================================================="
 sudo cp /tmp/config.yml /etc/google-cloud-ops-agent/config.yml || { echo "Failed to copy Ops Agent configuration file. Exiting."; exit 1; }
 sudo chmod 644 /etc/google-cloud-ops-agent/config.yml || { echo "Failed to set permissions for Ops Agent configuration file. Exiting."; exit 1; }
-
+sudo systemctl restart google-cloud-ops-agent || { echo "Failed to restart Ops Agent service. Exiting."; exit 1; }
 
 echo "================================================================="
 echo "Install Node and unzip"
