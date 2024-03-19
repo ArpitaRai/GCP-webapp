@@ -49,12 +49,6 @@ echo "Installing application dependencies and setting it up"
 echo "================================================================="
 sudo npm install || { echo "Failed to install npm . Exiting."; exit 1; }
 
-echo "================================================================="
-echo "Create directory: /var/log/webapp"
-echo "================================================================="
-sudo mkdir -p /var/log/webapp || { echo "Failed to create /var/log/webapp. Exiting."; exit 1; }
-
-
 
 # echo "================================================================="
 # echo "Creating .env file"
@@ -66,9 +60,13 @@ sudo mkdir -p /var/log/webapp || { echo "Failed to create /var/log/webapp. Exiti
 # MYSQL_HOST=localhost" | sudo tee .env
 
 echo "================================================================="
+echo "Create directory: /var/log/webapp"
+echo "================================================================="
+sudo mkdir -p /var/log/webapp || { echo "Failed to create /var/log/webapp. Exiting."; exit 1; }
+
+echo "================================================================="
 echo "Move webapp service file"
 echo "================================================================="
-
 sudo mv /tmp/webapp.service /etc/systemd/system/webapp.service || { echo "Failed to move webapp.service . Exiting."; exit 1; }
 
 echo "================================================================="
@@ -76,17 +74,12 @@ echo "Creating user and changing directory ownership"
 echo "================================================================="
 sudo adduser csye6225 --shell /usr/sbin/nologin || { echo "Failed to add csye6225 user. Exiting."; exit 1; }
 sudo chown -R csye6225:csye6225 /opt/csye6225dir || { echo "Failed to change directory permissions. Exiting."; exit 1; }
-sudo chmod -R 744 /opt/csye6225dir || { echo "Failed to change directory permissions. Exiting."; exit 1; }
+sudo chmod -R 755 /opt/csye6225dir || { echo "Failed to change directory permissions. Exiting."; exit 1; }
 
-echo "================================================================="
-echo "Changing ownership of /var/log/webapp to csye6225 user"
-echo "================================================================="
-sudo chown -R csye6225:csye6225 /var/log/webapp || { echo "Failed to change directory permissions. Exiting."; exit 1; }
-
-echo "================================================================="
-echo "Changing permissions of /var/log/webapp directory"
-echo "================================================================="
-sudo chmod -R 744 /var/log/webapp || { echo "Failed to change directory permissions. Exiting."; exit 1; }
+# echo "================================================================="
+# echo "Changing permissions of /var/log/webapp directory"
+# echo "================================================================="
+# sudo chmod -R 744 /var/log/webapp || { echo "Failed to change directory permissions. Exiting."; exit 1; }
 
 # echo "================================================================="
 # echo "Run the application"
@@ -100,7 +93,7 @@ echo "================================================================="
 echo "Installing the Ops Agent"
 echo "================================================================="
 
-curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh || { echo "Failed to download the Ops Agent installation script. Exiting."; exit 1; }
+sudo curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh || { echo "Failed to download the Ops Agent installation script. Exiting."; exit 1; }
 sudo bash add-google-cloud-ops-agent-repo.sh --also-install || { echo "Failed to install the Ops Agent. Exiting."; exit 1; }
 
 echo "================================================================="
@@ -110,6 +103,10 @@ sudo cp /tmp/config.yml /etc/google-cloud-ops-agent/config.yml || { echo "Failed
 # sudo chmod 644 /etc/google-cloud-ops-agent/config.yml || { echo "Failed to set permissions for Ops Agent configuration file. Exiting."; exit 1; }
 sudo systemctl restart google-cloud-ops-agent || { echo "Failed to restart Ops Agent service. Exiting."; exit 1; }
 
+echo "================================================================="
+echo "Changing ownership of /var/log/webapp to csye6225 user"
+echo "================================================================="
+sudo chown -R csye6225:csye6225 /var/log/webapp || { echo "Failed to change directory permissions. Exiting."; exit 1; }
 
 echo "=======================ALL DONE==================================="
 
