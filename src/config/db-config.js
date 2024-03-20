@@ -16,7 +16,7 @@ sequelize.sync({ force: process.env.DB_FORCE_SYNC === 'true' })
         logger.info('Database synchronized successfully');
     })
     .catch((error) => {
-        logger.fatal('Error syncing database:', error);
+        logger.error('Error syncing database:', error);
     });
 
 
@@ -25,7 +25,7 @@ sequelize.authenticate()
     logger.info("connected . . .")
 })
 .catch(err=>{
-    logger.fatal("Error :: ", err);
+    logger.error("Error :: ", err);
 })
 
 
