@@ -1,4 +1,4 @@
- import winston from 'winston'
+//  import winston from 'winston'
 
 // const { combine, timestamp, printf, colorize, align } = winston.format;
 // const logLevels = {
@@ -51,32 +51,67 @@
 
 // import winston from 'winston';
 
-import { transports, format } from "winston";
+// import { transports, format } from "winston";
 
-const useFormat = format.printf(({ timestamp, level, message }) => {
-  let severity = 'DEFAULT';
-  if (level === 'error' || level === 'critical') {
-    severity = 'ERROR';
-  } else if (level === 'warn') {
-    severity = 'WARNING';
-  } else if (level === 'info') {
-    severity = 'INFO';
-  } else if (level === 'verbose' || level === 'debug') {
-    severity = 'DEBUG';
-  }
+// const useFormat = format.printf(({ timestamp, level, message }) => {
+//   let severity = 'DEFAULT';
+//   if (level === 'error' || level === 'critical') {
+//     severity = 'ERROR';
+//   } else if (level === 'warn') {
+//     severity = 'WARNING';
+//   } else if (level === 'info') {
+//     severity = 'INFO';
+//   } else if (level === 'verbose' || level === 'debug') {
+//     severity = 'DEBUG';
+//   }
 
-  const logEntry = {
-    timestamp,
-    severity,
-    message,
-  };
+//   const logEntry = {
+//     timestamp,
+//     severity,
+//     message,
+//   };
 
-  return JSON.stringify(logEntry);
-});
+//   return JSON.stringify(logEntry);
+// });
+
+// const logger = winston.createLogger({
+//   level: 'info',
+//   format: useFormat,
+//   transports: [
+//     new winston.transports.Console(),
+//     process.env.ENV === 'dev' ? new transports.File({ filename: "./logs/webapp.log" }) : new transports.File({ filename: '../../var/log/webapp/csye6225.log' }),
+//   ],
+// });
+
+// export default logger;
+
+import winston, { transports, format } from "winston";
 
 const logger = winston.createLogger({
   level: 'info',
-  format: useFormat,
+  format: format.combine(
+    format.timestamp(), // Include timestamp in the default format
+    format.printf(({ timestamp, level, message }) => {
+      let severity = 'DEFAULT';
+      if (level === 'error' || level === 'critical') {
+        severity = 'ERROR';
+      } else if (level === 'warn') {
+        severity = 'WARNING';
+      } else if (level === 'info') {
+        severity = 'INFO';
+      } else if (level === 'verbose' || level === 'debug') {
+        severity = 'DEBUG';
+      }
+
+      const logEntry = {
+        timestamp,
+        severity,
+        message,
+      };
+
+      return JSON.stringify(logEntry);
+    })
+  ),
   transports: [
     new winston.transports.Console(),
     process.env.ENV === 'dev' ? new transports.File({ filename: "./logs/webapp.log" }) : new transports.File({ filename: '../../var/log/webapp/csye6225.log' }),
@@ -84,3 +119,4 @@ const logger = winston.createLogger({
 });
 
 export default logger;
+
