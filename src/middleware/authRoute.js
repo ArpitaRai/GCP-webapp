@@ -7,11 +7,9 @@ export const authRoute = async (req, res) => {
   logger.info("Validating user authentication and access to the API");
   let status = 200;
   const user = await auth(req);
-  logger.info("User:", user);
   const dbuser = await User.findOne({where: {username: user.name}})
   if(dbuser){
     const passwordMatches = await comparePassword(dbuser.password, user.pass);
-    //const userId = req.params.id;
     if(! passwordMatches){
       logger.error("User authentication failed due to password mismatch");
       status = 401;

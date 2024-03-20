@@ -21,7 +21,7 @@ class UserService {
         account_updated: currentUser.account_updated,
       };
     } catch (error) {
-      logger.error('Error in getCurrentUser:', error.message);
+      logger.error('Error in getCurrentUser ', error.message);
       throw new Error('Internal Server Error');
     }
   }
@@ -40,15 +40,16 @@ class UserService {
       if(last_name){currentUser.last_name = last_name;}
       
       if (password && password.trim() !== '') {
-        logger.info('Updating password for user:', currentUser.username);
+        logger.info('Updating password for user ', currentUser.username);
         currentUser.password = await bcrypt.hash(password, 10);
       }
 
       currentUser.account_updated = new Date();
       await currentUser.save();
+      logger.info('User details updated successfully');
       return ({ message: 'User details updated successfully' });
     } catch (error) {
-      logger.error('Error in updateCurrentUser:', error.message);
+      logger.error('Error in updateCurrentUser ', error.message);
       throw new Error('Internal Server Error');
     }
   }
@@ -66,7 +67,7 @@ class UserService {
         //  account_created: new Date(),
         //  account_updated: new Date(),
       });
-
+      logger.info('New user created successfully!')
       return {
         id: newUser.id,
         first_name: newUser.first_name,
@@ -76,7 +77,7 @@ class UserService {
         account_updated: newUser.account_updated,
       };
     } catch (error) {
-      logger.error('Error in createUser:', error.message);
+      logger.error('Error in createUser', error.message);
       throw new Error('Internal Server Error');
     }
   }

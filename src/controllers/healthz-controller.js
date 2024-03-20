@@ -22,6 +22,8 @@ const healthzController = (req, res) => {
     return res.status(400).send();
   }
 
+  logger.debug('Attempting database connection...');
+
   sequelize
     .authenticate()
     .then(() => {
@@ -32,6 +34,9 @@ const healthzController = (req, res) => {
       logger.error('Database connection error:', error.message);
       res.status(503).end();
     });
+    if (!res.headersSent) {
+      logger.warn('Response not sent yet');
+    }
 };
 
 export default healthzController;

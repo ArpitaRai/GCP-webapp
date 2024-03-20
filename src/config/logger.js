@@ -87,13 +87,14 @@
 
 import winston, { transports, format } from "winston";
 
+
 const logger = winston.createLogger({
   level: 'info',
   format: format.combine(
     format.timestamp(), // Include timestamp in the default format
     format.printf(({ timestamp, level, message }) => {
       let severity = 'DEFAULT';
-      if (level === 'error' || level === 'critical') {
+      if (level === 'error' || level === 'critical' || level === 'fatal') {
         severity = 'ERROR';
       } else if (level === 'warn') {
         severity = 'WARNING';
