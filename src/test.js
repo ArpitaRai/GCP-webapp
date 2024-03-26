@@ -68,7 +68,7 @@ describe('User API Endpoint Tests', () => {
         password: updatedPassword,
       })
       .set('Authorization', `Basic ${authCredentials}`)
-      .expect(200);
+      .expect(204);
      let authCredentialsForUpdate = Buffer.from(`${testUserEmail}:${updatedPassword}`).toString('base64');
 
     const getResponse = await request.get(userSelfEndpoint)

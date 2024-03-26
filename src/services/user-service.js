@@ -65,7 +65,7 @@ class UserService {
       currentUser.account_updated = new Date();
       await currentUser.save();
       logger.info('User details updated successfully');
-      return ( {status: 200, message: 'User details updated successfully' });
+      return ( {status: 204, message: 'User details updated successfully' });
     } catch (error) {
       logger.error('Error in updateCurrentUser ', error.message);
       throw new Error('Internal Server Error');
