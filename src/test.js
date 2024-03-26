@@ -3,6 +3,7 @@ import supertest from 'supertest';
 import app from './app.js';
 import sequelize from './config/db-config.js';
 import logger from './config/logger.js';
+import User from './models/user.js';
 
 const { expect } = chai;
 const request = supertest(app);
@@ -35,6 +36,8 @@ describe('User API Endpoint Tests', () => {
         username: testUserEmail,
         password: testUserPassword,
       });
+     // logger.info(createUserResponse);
+      User.update({ account_verified: true }, { where: { username: testUserEmail } });
 
     // Get the authentication credentials for later use
     authCredentials = Buffer.from(`${testUserEmail}:${testUserPassword}`).toString('base64');
@@ -65,7 +68,7 @@ describe('User API Endpoint Tests', () => {
         password: updatedPassword,
       })
       .set('Authorization', `Basic ${authCredentials}`)
-      .expect(204);
+      .expect(200);
      let authCredentialsForUpdate = Buffer.from(`${testUserEmail}:${updatedPassword}`).toString('base64');
 
     const getResponse = await request.get(userSelfEndpoint)
@@ -82,5 +85,6 @@ describe('User API Endpoint Tests', () => {
     // Exit the process after the tests are completed
     //process.exit();
   });
+  // this.timeout(5000);
 });
 

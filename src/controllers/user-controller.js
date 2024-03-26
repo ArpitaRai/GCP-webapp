@@ -3,6 +3,7 @@ import User from '../models/user.js';
 import authRoute from '../middleware/authRoute.js';
 import auth from 'basic-auth';
 import logger from '../config/logger.js';
+import moment from 'moment'; // Import the moment library for date/time manipulation
 
 const validateCreateUserFields = ({ first_name, last_name, password, username }) => {
   const isString = (value) => {
@@ -79,7 +80,7 @@ export const getCurrentUser = async (req, res) => {
     const status = await authRoute(req, res); 
     if (status === 200) {
         const userResponse = await userService.getCurrentUser(req, res);
-        return res.status(200).json(userResponse);
+        return res.status(userResponse.status).json(userResponse.userResponse);
       } else {
         return res.status(status).send("");
       }
@@ -134,7 +135,7 @@ export const updateCurrentUser = async (req, res) => {
     }
     
     const userResponse = await userService.updateCurrentUser(req, res, { first_name, last_name, password });
-    return res.status(204).json(userResponse);}else {
+    return res.status(userResponse.status).json(userResponse.message);}else {
         return res.status(status).send("");
       }
 
@@ -183,12 +184,51 @@ export const createUser = async (req, res) => {
       return res.status(400).json({ message: 'Bad Request, User already exists!' });
     }
 
-    const userResponse = await userService.createUser({ first_name, last_name, password, username });
+    const userResponse = await userService.createUser({ req, first_name, last_name, password, username });
     return res.status(201).json(userResponse);
   } catch (error) {
     logger.error('Error in createUser', error.message);
     return res.status(500).json({ error: error.message });
+  }  
+};
+
+export const verifyUser = async (req, res) => {
+  try {
+    const { verificationToken } = req.query;
+    logger.info(req.url);
+    if (!verificationToken) {
+      return res.status(400).json({ error: 'Verification token is missing.' });
+    }
+
+    // Find the user by the verification token
+    const user = await User.findOne({ where: { verification_token: verificationToken } });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found or invalid verification token.' });
+    }
+    // Check if the token has expired
+    const tokenExpirationTime = moment(user.account_created).add(2, 'minutes');
+    if (moment() > tokenExpirationTime) {
+      return res.status(400).json({ error: 'Verification token has expired.' });
+    }
+    // Mark the user as verified
+    user.account_verified = true;
+    user.verificationToken = null; // Optionally clear the verification token from the user record
+    await user.save();
+
+    const htmlResponse = `
+    <html>
+      <head>
+        <title>User Verification Successfull!</title>
+      </head>
+      <body>
+        <h1>User Verified</h1>
+        <p>Congratulations! You have been successfully verified.</p>
+      </body>
+    </html>
+  `;
+  return res.status(200).header('Content-Type', 'text/html').send(htmlResponse);  } catch (error) {
+    logger.error('Error in user verification:', error);
+    return res.status(500).json({ error: 'Internal Server Error.' });
   }
-
-
 };

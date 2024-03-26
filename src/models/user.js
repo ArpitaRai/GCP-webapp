@@ -29,8 +29,16 @@ const User = sequelize.define("user",
       type: Sequelize.STRING,
       allowNull: false
 
+    }, 
+    account_verified: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false // Set default value to false
     },
-  
+    verification_token: { 
+      type: Sequelize.STRING,
+      allowNull: true // Allow null for users who haven't been sent the verification token yet
+    },
+    
 },{
   timestamps: true, // Add timestamps to the table
   createdAt: 'account_created', 

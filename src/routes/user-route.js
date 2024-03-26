@@ -12,10 +12,11 @@ userRoute.put('/self', userController.updateCurrentUser);
 // Create a new user
 userRoute.post('/', userController.createUser);
 
-
 userRoute.all('/self', (req, res) => {
   return res.status(405).end();
 });
+
+userRoute.get('/authenticate', userController.verifyUser);
 
 userRoute.all('*', (req, res) => {
   res.status(404).end();
