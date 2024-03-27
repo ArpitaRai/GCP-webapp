@@ -215,20 +215,49 @@ export const verifyUser = async (req, res) => {
     user.account_verified = true;
     user.verificationToken = null; // Optionally clear the verification token from the user record
     await user.save();
-
     const htmlResponse = `
-    <html>
-      <head>
-        <title>User Verification Successfull!</title>
-      </head>
-      <body>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>User Verification Successful!</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          background-color: #f4f4f4;
+          padding: 20px;
+          margin: 0;
+        }
+        .container {
+          max-width: 600px;
+          margin: 0 auto;
+          background-color: #fff;
+          border-radius: 10px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          padding: 30px;
+        }
+        h1 {
+          color: #333;
+        }
+        p {
+          color: #666;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
         <h1>User Verified</h1>
         <p>Congratulations! You have been successfully verified.</p>
-      </body>
+        <img src="https://www.emugifs.net/wp-content/uploads/2021/07/Minions-Applause-GIF-Reaction-for-Congratulations-Well-Done-or-Excellent-Performance-Download-for-Free-and-Share-on-Facebook-Comment-or-WhatsApp-Messenger.gif" alt="Verified Image" style="max-width: 100%;">
+      </div>
+    </body>
     </html>
+    
   `;
   return res.status(200).header('Content-Type', 'text/html').send(htmlResponse);  } catch (error) {
     logger.error('Error in user verification:', error);
     return res.status(500).json({ error: 'Internal Server Error.' });
   }
 };
+
