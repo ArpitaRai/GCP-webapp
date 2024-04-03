@@ -89,9 +89,10 @@ class UserService {
         //  account_created: new Date(),
         //  account_updated: new Date(),
       });
-      const verificationLink = `${req.protocol}://${req.get('host')}${req.originalUrl}/authenticate?verificationToken=${verificationToken}`;
+      console.log(req);
+      const verificationLink = `https://${req.get('host')}${req.originalUrl}/authenticate?verificationToken=${verificationToken}`;
             logger.info(verificationLink);
-
+      console.log(verificationLink);
        publishMessage( verificationLink, username);
 
       
