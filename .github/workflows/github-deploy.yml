@@ -168,33 +168,20 @@ jobs:
               --scopes=cloud_platform \
               --metadata=startup-script="${METADATA}"
 
-    - name: Create Managed Instance Group
+    - name:  Managed Instance Group with new instance templae
       run: |
                 # Set the project ID in gcloud configuration
                 gcloud config set project "$PROJECT_ID"
             
                 # Define variables
-                INSTANCE_GROUP_NAME="webapp-server-new"
+                INSTANCE_GROUP_NAME="webapp-server"
                 INSTANCE_TEMPLATE="projects/${{ secrets.PROJECT_ID }}/regions/us-east4/instanceTemplates/new-webapp-instance-template"
                 SIZE=3
                 ZONE="us-east4-a" # Specify your desired zone here
             
-                # Create the managed instance group
-                gcloud compute instance-groups managed create $INSTANCE_GROUP_NAME \
-                  --size $SIZE \
-                  --template $INSTANCE_TEMPLATE \
-                  --zone $ZONE
-
-                # Set named port
-                gcloud compute instance-groups managed set-named-ports $INSTANCE_GROUP_NAME \
-                  --named-ports=instance-port-name:8080 \
-                  --zone $ZONE
-
-                # Update auto-healing policies
-                gcloud compute instance-groups managed update $INSTANCE_GROUP_NAME \
-                  --health-check=projects/${{ secrets.PROJECT_ID }}/global/httpHealthChecks/webapp_health_check \
-                  --initial-delay=300 \
-                  --zone $ZONE
+                gcloud compute instance-groups managed set-instance-template $INSTANCE_GROUP_NAME \
+                --template $INSTANCE_TEMPLATE \
+                --zone $ZONE
       env:
                 PROJECT_ID: ${{ secrets.PROJECT_ID }}
                 REGION: "us-east4"
