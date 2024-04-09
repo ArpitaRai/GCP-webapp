@@ -3,7 +3,7 @@ echo "================================================================="
 echo "Updating packages"
 echo "================================================================="
 
-sudo yum update -y || { echo "Failed to update packages. Exiting."; exit 1; }
+#sudo yum update -y || { echo "Failed to update packages. Exiting."; exit 1; }
 
 echo "================================================================="
 echo "Install Node and unzip"
