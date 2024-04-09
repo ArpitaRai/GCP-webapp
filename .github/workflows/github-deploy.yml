@@ -164,7 +164,7 @@ jobs:
               --network=projects/${{ secrets.PROJECT_ID }}/global/networks/${{ env.NETWORK_NAME }} \
               --subnet=projects/${{ secrets.PROJECT_ID }}/regions/us-east4/subnetworks/${{ env.SUBNETWORK_NAME }} \
               --network-tier=PREMIUM \
-              --service-account=$EMAIL_ADDRESS \
+              --service-account=vm-service-account@dev-gcp-414704.iam.gserviceaccount.com \
               --scopes=cloud_platform \
               --metadata=startup-script="${METADATA}"
 
@@ -174,8 +174,8 @@ jobs:
                 gcloud config set project "$PROJECT_ID"
             
                 # Define variables
-                INSTANCE_GROUP_NAME="example-group"
-                INSTANCE_TEMPLATE="projects/${{ secrets.PROJECT_ID }}/regions/${{ env.REGION }}/instanceTemplates/new-webapp-instance-template"
+                INSTANCE_GROUP_NAME="webapp-server-new"
+                INSTANCE_TEMPLATE="projects/${{ secrets.PROJECT_ID }}/regions/us-east4/instanceTemplates/new-webapp-instance-template"
                 SIZE=3
                 ZONE="us-east4-a" # Specify your desired zone here
             
@@ -183,6 +183,17 @@ jobs:
                 gcloud compute instance-groups managed create $INSTANCE_GROUP_NAME \
                   --size $SIZE \
                   --template $INSTANCE_TEMPLATE \
+                  --zone $ZONE
+
+                # Set named port
+                gcloud compute instance-groups managed set-named-ports $INSTANCE_GROUP_NAME \
+                  --named-ports=instance-port-name:8080 \
+                  --zone $ZONE
+
+                # Update auto-healing policies
+                gcloud compute instance-groups managed update $INSTANCE_GROUP_NAME \
+                  --health-check=projects/${{ secrets.PROJECT_ID }}/global/httpHealthChecks/webapp_health_check \
+                  --initial-delay=300 \
                   --zone $ZONE
       env:
                 PROJECT_ID: ${{ secrets.PROJECT_ID }}
