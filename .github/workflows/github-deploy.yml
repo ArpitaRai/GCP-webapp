@@ -84,12 +84,26 @@ jobs:
           
     - name: Fetch network and subnetwork details
       run: |
-           NETWORK_NAME=$(gcloud compute networks list --format="value(NAME)" --project=PROJECT_ID)
-           SUBNETWORK_NAME=$(gcloud compute networks subnets list --format="value(NAME)" --project=PROJECT_ID --region=REGION --network=NETWORK_NAME)
-           echo "Network name: $NETWORK_NAME"
-           echo "Subnetwork name: $SUBNETWORK_NAME"
-           echo "::set-env name=NETWORK_NAME::$NETWORK_NAME"
-           echo "::set-env name=SUBNETWORK_NAME::$SUBNETWORK_NAME"
+         # Retrieve the PROJECT_ID and REGION from environment variables
+         PROJECT_ID=$PROJECT_ID
+         REGION="us-east4"
+     
+         # Set the project ID in gcloud configuration
+         gcloud config set project "$PROJECT_ID"
+     
+         # Use the network name directly
+         NETWORK_NAME="my-vpc"
+         
+         # Set the subnetwork name directly
+         SUBNETWORK_NAME="webapp"
+     
+         # Print the network and subnetwork names
+         echo "Network name: $NETWORK_NAME"
+         echo "Subnetwork name: $SUBNETWORK_NAME"
+     
+         # Set environment variables for network and subnetwork names
+         echo "NETWORK_NAME=$NETWORK_NAME" >> $GITHUB_ENV
+         echo "SUBNETWORK_NAME=$SUBNETWORK_NAME" >> $GITHUB_ENV
       env:
            PROJECT_ID: ${{ secrets.PROJECT_ID }}
            REGION: us-east4     
