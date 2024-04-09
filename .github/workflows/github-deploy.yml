@@ -66,29 +66,21 @@ jobs:
     - name: Initialize packer
       id: init
       run: packer init .
-  
-    # - name : Format Packer
-    #   id: format
-    #   run: packer fmt -check=true .
-      
-    # - name: Run packer validate
-    #   id: validate
-    #   run: packer validate .
 
     - name: Build Packer
       id: build
-      run: packer build .
+      run: |
+        PACKER_OUTPUT=$(packer build .)
+        echo "$PACKER_OUTPUT"
+        IMAGE_ID=$(echo "$PACKER_OUTPUT" | grep 'A disk image was created' | grep -oP 'centos-stream-8-v\d+-\d+-\d+-\d+-\d+')
+        echo "IMAGE_ID=$IMAGE_ID"
+        IMAGE_NAME="projects/dev-gcp-414704/global/images/$IMAGE_ID"
+        echo "::set-output name=image-id::$IMAGE_NAME"
 
       #////////////////////////////////assignment #9 /////////////////////////////////////////////
 
        # Add steps to build and deploy your application as needed
 
-    - name: Extract Image Name
-      id: extract-image-name
-      run: |
-            IMAGE_ID=$(grep -oP 'A disk image was created in the .+ project: (\S+)' <<< "${{ steps.build-packer.outputs.packer-build-output }}")
-            IMAGE_NAME="projects/dev-gcp-414704/global/images/$IMAGE_ID"
-            echo "::set-output name=image-id::$IMAGE_NAME"
           
     - name: Fetch network and subnetwork details
       run: |
