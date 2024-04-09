@@ -109,10 +109,14 @@ jobs:
            REGION: us-east4     
            
     - name: Fetch Service Account Email
+      id: fetch-email
       run: |
-             EMAIL_ADDRESS=$(gcloud iam service-accounts list --format='value(email)' --filter="displayName=VM Service Account")
-             echo "Service Account Email: $EMAIL_ADDRESS"
-             echo "::set-env name=EMAIL_ADDRESS::$EMAIL_ADDRESS"
+        EMAIL_ADDRESS=$(gcloud iam service-accounts list --format='value(email)' --filter="displayName=VM Service Account")
+        echo "Service Account Email: $EMAIL_ADDRESS"
+      shell: bash
+
+    - name: Set EMAIL_ADDRESS in environment file
+      run: echo "EMAIL_ADDRESS=${{ steps.fetch-email.outputs.stdout }}" >> $GITHUB_ENV
                
     - name: Create new instance template version
       run: |
