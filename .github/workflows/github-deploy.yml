@@ -83,11 +83,12 @@ jobs:
 
        # Add steps to build and deploy your application as needed
 
-    - name: Fetch latest machine image ID
+    - name: Extract Image Name
+      id: extract-image-name
       run: |
-         IMAGE_ID=$(gcloud compute images describe latest --format='get(selfLink)')
-         echo "Latest machine image ID: $IMAGE_ID"
-         echo "::set-env name=IMAGE_ID::$IMAGE_ID"
+            IMAGE_ID=$(grep -oP 'A disk image was created in the \'\*\*\*\' project: (\S+)' <<< "${{ steps.build-packer.outputs.packer-build-output }}")
+            IMAGE_NAME="projects/dev-gcp-414704/global/images/$IMAGE_ID"
+            echo "::set-output name=image-id::$IMAGE_NAME"
           
     - name: Fetch network and subnetwork details
       run: |
@@ -99,7 +100,7 @@ jobs:
            echo "::set-env name=SUBNETWORK_NAME::$SUBNETWORK_NAME"
       env:
            PROJECT_ID: ${{ secrets.PROJECT_ID }}
-           REGION: us-east1     
+           REGION: us-east4     
            
     - name: Fetch Service Account Email
       run: |
