@@ -162,7 +162,7 @@ jobs:
               --image-project=$PROJECT_ID \
               --boot-disk-size=100 \
               --network=projects/${{ secrets.PROJECT_ID }}/global/networks/${{ env.NETWORK_NAME }} \
-              --subnet=projects/${{ secrets.PROJECT_ID }}/regions/${{ env.REGION }}/subnetworks/${{ env.SUBNETWORK_NAME }} \
+              --subnet=projects/${{ secrets.PROJECT_ID }}/regions/us-east4/subnetworks/${{ env.SUBNETWORK_NAME }} \
               --network-tier=PREMIUM \
               --service-account=$EMAIL_ADDRESS \
               --scopes=cloud_platform \
