@@ -1,7 +1,7 @@
 name: Packer Build Custom Image
 
 on:
-  push:
+  pull_request:
     branches:
       - main
 
@@ -79,7 +79,80 @@ jobs:
       id: build
       run: packer build .
 
+      #////////////////////////////////assignment #9 /////////////////////////////////////////////
 
+       # Add steps to build and deploy your application as needed
 
-      
-   
+    - name: Fetch latest machine image ID
+      run: |
+         IMAGE_ID=$(gcloud compute images describe latest --format='get(selfLink)')
+         echo "Latest machine image ID: $IMAGE_ID"
+         echo "::set-env name=IMAGE_ID::$IMAGE_ID"
+          
+    - name: Fetch network and subnetwork details
+      run: |
+           NETWORK_NAME=$(gcloud compute networks list --format="value(NAME)" --project=PROJECT_ID)
+           SUBNETWORK_NAME=$(gcloud compute networks subnets list --format="value(NAME)" --project=PROJECT_ID --region=REGION --network=NETWORK_NAME)
+           echo "Network name: $NETWORK_NAME"
+           echo "Subnetwork name: $SUBNETWORK_NAME"
+           echo "::set-env name=NETWORK_NAME::$NETWORK_NAME"
+           echo "::set-env name=SUBNETWORK_NAME::$SUBNETWORK_NAME"
+      env:
+           PROJECT_ID: ${{ secrets.PROJECT_ID }}
+           REGION: us-east1     
+           
+    - name: Fetch Service Account Email
+      run: |
+             EMAIL_ADDRESS=$(gcloud iam service-accounts list --format='value(email)' --filter="displayName=VM Service Account")
+             echo "Service Account Email: $EMAIL_ADDRESS"
+             echo "::set-env name=EMAIL_ADDRESS::$EMAIL_ADDRESS"
+               
+    - name: Create new instance template version
+      run: |
+            # Retrieve secret values from Google Secret Manager
+            MYSQL_DATABASE=$(gcloud secrets versions access latest --secret="MYSQL_DATABASE")
+            MYSQL_USER=$(gcloud secrets versions access latest --secret="MYSQL_USER")
+            MYSQL_PASSWORD=$(gcloud secrets versions access latest --secret="MYSQL_PASSWORD")
+            MYSQL_HOST=$(gcloud secrets versions access latest --secret="MYSQL_HOST")
+            ENV=$(gcloud secrets versions access latest --secret="ENV")
+        
+            # Create metadata script
+            METADATA=$(cat <<EOF
+            #!/bin/bash
+            set -e
+        
+            # Change directory to /opt
+            cd /opt
+        
+            # Create a .env file with database connection details
+            if [ ! -f /opt/.env ]; then
+              echo "MYSQL_DATABASE=${MYSQL_DATABASE}" >> /opt/.env
+              echo "MYSQL_USER=${MYSQL_USER}" >> /opt/.env
+              echo "MYSQL_PASSWORD=${MYSQL_PASSWORD}" >> /opt/.env
+              echo "MYSQL_HOST=${MYSQL_HOST}" >> /opt/.env
+              echo "ENV=${ENV}" >> /opt/.env
+            fi
+            
+            # Reload systemctl daemon
+            sudo systemctl daemon-reload
+
+            # Enable and start webapp service
+            sudo systemctl enable webapp.service
+            sudo systemctl start webapp.service
+            EOT
+            )
+        
+            # Run gcloud command to create instance template
+            gcloud compute instance-templates-region create new-webapp-instance-template \
+              --machine-type=n2d-highmem-16 \
+              --region=$REGION \
+              --tags=web-application \
+              --image=$IMAGE_ID \
+              --image-project=$PROJECT_ID \
+              --boot-disk-size=100 \
+              --network=projects/${{ secrets.PROJECT_ID }}/global/networks/${{ env.NETWORK_NAME }} \
+              --subnet=projects/${{ secrets.PROJECT_ID }}/regions/${{ env.REGION }}/subnetworks/${{ env.SUBNETWORK_NAME }} \
+              --network-tier=PREMIUM \
+              --service-account=$EMAIL_ADDRESS \
+              --scopes=cloud_platform \
+              --metadata=startup-script="${METADATA}"
