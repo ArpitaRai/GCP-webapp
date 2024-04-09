@@ -150,7 +150,7 @@ jobs:
             # Enable and start webapp service
             sudo systemctl enable webapp.service
             sudo systemctl start webapp.service
-            EOT
+            EOF
             )
         
             # Run gcloud command to create instance template
@@ -167,3 +167,24 @@ jobs:
               --service-account=$EMAIL_ADDRESS \
               --scopes=cloud_platform \
               --metadata=startup-script="${METADATA}"
+
+    - name: Create Managed Instance Group
+      run: |
+                # Set the project ID in gcloud configuration
+                gcloud config set project "$PROJECT_ID"
+            
+                # Define variables
+                INSTANCE_GROUP_NAME="example-group"
+                INSTANCE_TEMPLATE="projects/${{ secrets.PROJECT_ID }}/regions/${{ env.REGION }}/instanceTemplates/new-webapp-instance-template"
+                SIZE=3
+                ZONE="us-east4-a" # Specify your desired zone here
+            
+                # Create the managed instance group
+                gcloud compute instance-groups managed create $INSTANCE_GROUP_NAME \
+                  --size $SIZE \
+                  --template $INSTANCE_TEMPLATE \
+                  --zone $ZONE
+      env:
+                PROJECT_ID: ${{ secrets.PROJECT_ID }}
+                REGION: "us-east4"
+            
