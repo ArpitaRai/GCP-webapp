@@ -154,9 +154,9 @@ jobs:
             )
         
             # Run gcloud command to create instance template
-            gcloud compute instance-templates-region create new-webapp-instance-template \
+            gcloud compute instance-templates create new-webapp-instance-template \
               --machine-type=n2d-highmem-16 \
-              --region=$REGION \
+              --instance-template-region=us-east4 \
               --tags=web-application \
               --image=$IMAGE_ID \
               --image-project=$PROJECT_ID \
