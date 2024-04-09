@@ -72,7 +72,7 @@ jobs:
       run: |
         PACKER_OUTPUT=$(packer build .)
         echo "$PACKER_OUTPUT"
-        IMAGE_ID=$(echo "$PACKER_OUTPUT" | sed -nE "s/A disk image was created in the '([^']+)' project: (\w+-\w+-\w+-\w+-\w+-\w+-\w+-\w+-\w+-\w+-\w+)/\2/p")
+        IMAGE_ID=$(echo "$PACKER_OUTPUT" | grep 'A disk image was created' | grep -oP 'webapp-packer-image-\d+-\d+-\d+-\d+-\d+-\d+')
         echo "IMAGE_ID=$IMAGE_ID"
         IMAGE_NAME="projects/dev-gcp-414704/global/images/$IMAGE_ID"
         echo "::set-output name=image-id::$IMAGE_NAME"
