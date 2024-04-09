@@ -17,7 +17,7 @@ class UserService {
   //     throw new Error('Account not verified');
   // }
   if(currentUser.account_verified == false){
-    return ({ status: 401 , message: 'User not verified!' });
+    return ({ status: 403 , message: 'User not verified!' });
   }
 
       if (!currentUser) {
@@ -46,7 +46,7 @@ class UserService {
 
       // Check if the account is verified
       if(currentUser.account_verified == false){
-        return ({ status: 401 , message: 'User not verified!' });
+        return ({ status: 403 , message: 'User not verified!' });
       }
       
      if (!currentUser) {
