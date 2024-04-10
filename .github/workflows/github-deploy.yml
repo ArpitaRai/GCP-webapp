@@ -114,8 +114,9 @@ jobs:
       shell: bash
 
     - name: Set EMAIL_ADDRESS in environment file
-      run: echo "EMAIL_ADDRESS=${{ steps.fetch-email.outputs.stdout }}" >> $GITHUB_ENV
-           echo "IMAGE_NAME = $IMAGE_NAME"
+      run: |
+            echo "EMAIL_ADDRESS=${{ steps.fetch-email.outputs.stdout }}" >> $GITHUB_ENV
+            echo "IMAGE_NAME = $IMAGE_NAME"
 
                
     - name: Create new instance template version
