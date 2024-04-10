@@ -203,6 +203,6 @@ jobs:
             ZONE="us-east4-a" 
             REGION="us-east4"  
 
-            gcloud compute instance-groups managed wait-until INSTANCE_GROUP_NAME \
+            gcloud compute instance-groups managed wait-until $INSTANCE_GROUP_NAME \
             --version-target-reached \
             --region=us-east4
