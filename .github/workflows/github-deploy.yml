@@ -164,7 +164,7 @@ jobs:
               --subnet=projects/${{ secrets.PROJECT_ID }}/regions/${{vars.REGION}}/subnetworks/${{ vars.SUBNETWORK_NAME }} \
               --network-tier=${{vars.NETWORK_TIER}} \
               --service-account=${{ secrets.SERVICE_ACCOUNT }} \
-              --scopes= ${{vars.SCOPES}} \
+              --scopes=${{vars.SCOPES}} \
               --metadata=startup-script="${METADATA}"
 
     - name:  Managed Instance Group with new instance templae
