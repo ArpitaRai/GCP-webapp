@@ -1,0 +1,40 @@
+name: packer-validate
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: packer-validate
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Setting up `packer`
+      uses: hashicorp/setup-packer@main
+      id: setup
+      with:
+          version: "latest"
+
+    - name: Making zip of the project
+      run: zip -r webapp.zip .
+
+    # - name: Set up Google Cloud credentials
+    #   run: echo "${{ secrets.GCP_ACCOUNT_JSON }}" > account-gcp.json
+
+    - name: Packer init
+      run: packer init .
+
+    - name: Packer fmt check
+      run: packer fmt -check .
+
+    - name: Packer validate
+      run: packer validate .
+      
+
+      
+   

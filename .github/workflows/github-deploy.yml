@@ -1,7 +1,7 @@
 name: Packer Build Custom Image
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
