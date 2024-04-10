@@ -153,10 +153,10 @@ jobs:
         
             # Run gcloud command to create instance template
             gcloud compute instance-templates create new-webapp-instance-template \
-              --machine-type=n2d-highmem-16 \
+              --machine-type=e2-medium \
               --instance-template-region=us-east4 \
               --tags=web-application \
-              --image=$IMAGE_ID \
+              --image=$IMAGE_NAME \
               --image-project=$PROJECT_ID \
               --boot-disk-size=100 \
               --network=projects/${{ secrets.PROJECT_ID }}/global/networks/${{ env.NETWORK_NAME }} \
@@ -178,7 +178,6 @@ jobs:
                 gcloud compute instance-groups managed set-instance-template $INSTANCE_GROUP_NAME \
                 --template $INSTANCE_TEMPLATE \
                 --region=us-east4
-
       env:
                   PROJECT_ID: ${{ secrets.PROJECT_ID }}
                   REGION: us-east4 
