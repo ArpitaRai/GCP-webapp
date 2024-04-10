@@ -174,11 +174,14 @@ jobs:
                 # Define variables
                 INSTANCE_GROUP_NAME="webapp-server"
                 INSTANCE_TEMPLATE="projects/${{ secrets.PROJECT_ID }}/regions/us-east4/instanceTemplates/new-webapp-instance-template"
-                ZONE="us-east4-a" # Specify your desired zone here
             
                 gcloud compute instance-groups managed set-instance-template $INSTANCE_GROUP_NAME \
                 --template $INSTANCE_TEMPLATE \
-                --region=us-east1
+                --region=us-east4
+
+      env:
+                  PROJECT_ID: ${{ secrets.PROJECT_ID }}
+                  REGION: us-east4 
 
     - name:  Starting a basic rolling update
       run: |
