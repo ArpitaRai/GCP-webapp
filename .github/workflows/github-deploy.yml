@@ -79,8 +79,6 @@ jobs:
 
       #////////////////////////////////assignment #9 /////////////////////////////////////////////
 
-       # Add steps to build and deploy your application as needed
-
           
     - name: Fetch network and subnetwork details
       run: |
@@ -176,13 +174,32 @@ jobs:
                 # Define variables
                 INSTANCE_GROUP_NAME="webapp-server"
                 INSTANCE_TEMPLATE="projects/${{ secrets.PROJECT_ID }}/regions/us-east4/instanceTemplates/new-webapp-instance-template"
-                SIZE=3
                 ZONE="us-east4-a" # Specify your desired zone here
             
                 gcloud compute instance-groups managed set-instance-template $INSTANCE_GROUP_NAME \
                 --template $INSTANCE_TEMPLATE \
-                --zone $ZONE
-      env:
-                PROJECT_ID: ${{ secrets.PROJECT_ID }}
-                REGION: "us-east4"
+                --region=us-east1
+
+    - name:  Starting a basic rolling update
+      run: |
+            INSTANCE_GROUP_NAME="webapp-server"
+            INSTANCE_TEMPLATE="projects/${{ secrets.PROJECT_ID }}/regions/us-east4/instanceTemplates/new-webapp-instance-template"
+            ZONE="us-east4-a"
+            REGION="us-east4"
+ 
+            gcloud compute instance-groups managed rolling-action start-update $INSTANCE_GROUP_NAME \
+            --version=template=$INSTANCE_TEMPLATE \
+            [--zone=ZONE | --region=REGION]
             
+
+    - name:  Monitoring updates
+      run: |
+
+            INSTANCE_GROUP_NAME="webapp-server"
+            INSTANCE_TEMPLATE="projects/${{ secrets.PROJECT_ID }}/regions/us-east4/instanceTemplates/new-webapp-instance-template"
+            ZONE="us-east4-a" 
+            REGION="us-east4"  
+
+            gcloud compute instance-groups managed wait-until INSTANCE_GROUP_NAME \
+            --version-target-reached \
+            [--zone=ZONE | --region=REGION]
