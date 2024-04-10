@@ -1,7 +1,7 @@
 name: Packer Build Custom Image
 
 on:
-  push:
+  pull_request:
     branches:
       - main
 
@@ -126,6 +126,7 @@ jobs:
             MYSQL_PASSWORD=$(gcloud secrets versions access latest --secret="MYSQL_PASSWORD")
             MYSQL_HOST=$(gcloud secrets versions access latest --secret="MYSQL_HOST")
             ENV=$(gcloud secrets versions access latest --secret="ENV")
+            INSTANCE_KMS_KEY=$(gcloud secrets versions access latest --secret="INSTANCE_KMS_KEY" --format="value(payload.data)")
         
             # Create metadata script
             METADATA=$(cat <<EOF
@@ -160,7 +161,7 @@ jobs:
               --tags=${{vars.TAGS}} \
               --image=${{steps.build.outputs.IMAGE_NAME}} \
               --boot-disk-size=${{vars.BOOT_SIZE}} \
-              --boot-disk-kms-key=${{vars.KMS_KEY}} \
+              --boot-disk-kms-key=${INSTANCE_KMS_KEY} \
               --boot-disk-type=${{vars.DISK_TYPE}} \
               --network=projects/${{ secrets.PROJECT_ID }}/global/networks/${{vars.NETWORK_NAME }} \
               --subnet=projects/${{ secrets.PROJECT_ID }}/regions/${{vars.REGION}}/subnetworks/${{ vars.SUBNETWORK_NAME }} \
