@@ -83,16 +83,16 @@ jobs:
       run: |
          # Retrieve the PROJECT_ID and REGION from environment variables
          PROJECT_ID=$PROJECT_ID
-         REGION="us-east4"
+         REGION=${{vars.REGION}}
      
          # Set the project ID in gcloud configuration
          gcloud config set project "$PROJECT_ID"
      
          # Use the network name directly
-         NETWORK_NAME="my-vpc"
+         NETWORK_NAME=${{vars.NETWORK_NAME}}
          
          # Set the subnetwork name directly
-         SUBNETWORK_NAME="webapp"
+         SUBNETWORK_NAME=${{vars.SUBNETWORK_NAME}}
      
          # Print the network and subnetwork names
          echo "Network name: $NETWORK_NAME"
@@ -103,7 +103,7 @@ jobs:
          echo "SUBNETWORK_NAME=$SUBNETWORK_NAME" >> $GITHUB_ENV
       env:
            PROJECT_ID: ${{ secrets.PROJECT_ID }}
-           REGION: us-east4     
+           REGION: ${{vars.REGION}}     
            
     - name: Fetch Service Account Email
       id: fetch-email
@@ -155,54 +155,55 @@ jobs:
         
             # Run gcloud command to create instance template
             gcloud compute instance-templates create new-webapp-instance-template \
-              --machine-type=e2-medium \
-              --instance-template-region=us-east4 \
-              --tags=web-application \
+              --machine-type=${{vars.MACHINE_TYPE}} \
+              --instance-template-region=${{vars.REGION}} \
+              --tags=${{vars.TAGS}} \
               --image=${{steps.build.outputs.IMAGE_NAME}} \
-              --boot-disk-size=100 \
-              --network=projects/${{ secrets.PROJECT_ID }}/global/networks/${{ env.NETWORK_NAME }} \
-              --subnet=projects/${{ secrets.PROJECT_ID }}/regions/us-east4/subnetworks/${{ env.SUBNETWORK_NAME }} \
-              --network-tier=PREMIUM \
-              --service-account=vm-service-account@dev-gcp-414704.iam.gserviceaccount.com \
-              --scopes=https://www.googleapis.com/auth/cloud-platform \
+              --boot-disk-size=${{vars.BOOT_SIZE}} \
+              --network=projects/${{ secrets.PROJECT_ID }}/global/networks/${{vars.NETWORK_NAME }} \
+              --subnet=projects/${{ secrets.PROJECT_ID }}/regions/${{vars.REGION}}/subnetworks/${{ vars.SUBNETWORK_NAME }} \
+              --network-tier=${{vars.NETWORK_TIER}} \
+              --service-account=${{ secrets.SERVICE_ACCOUNT }} \
+              --scopes= ${{vars.SCOPES}} \
               --metadata=startup-script="${METADATA}"
-              
+
     - name:  Managed Instance Group with new instance templae
       run: |
                 # Set the project ID in gcloud configuration
                 gcloud config set project "$PROJECT_ID"
             
                 # Define variables
-                INSTANCE_GROUP_NAME="webapp-server"
-                INSTANCE_TEMPLATE="projects/${{ secrets.PROJECT_ID }}/regions/us-east4/instanceTemplates/new-webapp-instance-template"
+                INSTANCE_GROUP_NAME=${{vars.INSTANCE_GROUP_NAME}}
+                INSTANCE_TEMPLATE="projects/${{ secrets.PROJECT_ID }}/regions/${{vars.REGION}}/instanceTemplates/new-webapp-instance-template"
             
                 gcloud compute instance-groups managed set-instance-template $INSTANCE_GROUP_NAME \
                 --template $INSTANCE_TEMPLATE \
-                --region=us-east4
+                --region=${{vars.REGION}}
       env:
                   PROJECT_ID: ${{ secrets.PROJECT_ID }}
-                  REGION: us-east4 
+                  REGION: ${{vars.REGION}} 
 
     - name:  Starting a basic rolling update
       run: |
-            INSTANCE_GROUP_NAME="webapp-server"
-            INSTANCE_TEMPLATE="projects/${{ secrets.PROJECT_ID }}/regions/us-east4/instanceTemplates/new-webapp-instance-template"
-            ZONE="us-east4-a"
-            REGION="us-east4"
+            INSTANCE_GROUP_NAME=${{vars.INSTANCE_GROUP_NAME}}
+            INSTANCE_TEMPLATE="projects/${{ secrets.PROJECT_ID }}/regions/${{vars.REGION}}/instanceTemplates/new-webapp-instance-template"
+            ZONE=${{vars.ZONE}}
+            REGION=${{vars.REGION}} 
+
  
             gcloud compute instance-groups managed rolling-action start-update $INSTANCE_GROUP_NAME \
             --version=template=$INSTANCE_TEMPLATE \
-            --region=us-east4
+            --region=${{vars.REGION}} 
             
 
     - name:  Monitoring updates
       run: |
 
-            INSTANCE_GROUP_NAME="webapp-server"
-            INSTANCE_TEMPLATE="projects/${{ secrets.PROJECT_ID }}/regions/us-east4/instanceTemplates/new-webapp-instance-template"
-            ZONE="us-east4-a" 
-            REGION="us-east4"  
+            INSTANCE_GROUP_NAME=${{vars.INSTANCE_GROUP_NAME}}
+            INSTANCE_TEMPLATE="projects/${{ secrets.PROJECT_ID }}/regions/${{vars.REGION}}/instanceTemplates/new-webapp-instance-template"
+            ZONE=${{vars.ZONE}} 
+            REGION=${{vars.REGION}}  
 
             gcloud compute instance-groups managed wait-until $INSTANCE_GROUP_NAME \
             --version-target-reached \
-            --region=us-east4
+            --region=${{vars.REGION}} 
