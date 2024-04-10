@@ -115,6 +115,8 @@ jobs:
 
     - name: Set EMAIL_ADDRESS in environment file
       run: echo "EMAIL_ADDRESS=${{ steps.fetch-email.outputs.stdout }}" >> $GITHUB_ENV
+           echo "IMAGE_NAME = $IMAGE_NAME"
+
                
     - name: Create new instance template version
       run: |
@@ -190,7 +192,7 @@ jobs:
  
             gcloud compute instance-groups managed rolling-action start-update $INSTANCE_GROUP_NAME \
             --version=template=$INSTANCE_TEMPLATE \
-            [--zone=ZONE | --region=REGION]
+            --region=us-east4
             
 
     - name:  Monitoring updates
@@ -203,4 +205,4 @@ jobs:
 
             gcloud compute instance-groups managed wait-until INSTANCE_GROUP_NAME \
             --version-target-reached \
-            [--zone=ZONE | --region=REGION]
+            --region=us-east4
