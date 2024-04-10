@@ -161,7 +161,7 @@ jobs:
               --image=${{steps.build.outputs.IMAGE_NAME}} \
               --boot-disk-size=${{vars.BOOT_SIZE}} \
               --boot-disk-kms-key=${{vars.KMS_KEY}} \
-              --boot-disk-type=${{vars.DISK_TYPE}} \  # Add this line
+              --boot-disk-type=${{vars.DISK_TYPE}} \
               --network=projects/${{ secrets.PROJECT_ID }}/global/networks/${{vars.NETWORK_NAME }} \
               --subnet=projects/${{ secrets.PROJECT_ID }}/regions/${{vars.REGION}}/subnetworks/${{ vars.SUBNETWORK_NAME }} \
               --network-tier=${{vars.NETWORK_TIER}} \
