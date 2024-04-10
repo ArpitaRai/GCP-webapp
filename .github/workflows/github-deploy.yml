@@ -75,7 +75,7 @@ jobs:
         IMAGE_ID=$(echo "$PACKER_OUTPUT" | grep 'A disk image was created' | grep -oP 'webapp-packer-image-\d+-\d+-\d+-\d+-\d+-\d+')
         echo "IMAGE_ID=$IMAGE_ID"
         IMAGE_NAME="projects/dev-gcp-414704/global/images/$IMAGE_ID"
-        echo "::set-output name=image-id::$IMAGE_NAME"
+        echo "::set-output name=IMAGE_NAME::$IMAGE_NAME"
 
       #////////////////////////////////assignment #9 /////////////////////////////////////////////
 
@@ -157,13 +157,12 @@ jobs:
               --instance-template-region=us-east4 \
               --tags=web-application \
               --image=$IMAGE_NAME \
-              --image-project=$PROJECT_ID \
               --boot-disk-size=100 \
               --network=projects/${{ secrets.PROJECT_ID }}/global/networks/${{ env.NETWORK_NAME }} \
               --subnet=projects/${{ secrets.PROJECT_ID }}/regions/us-east4/subnetworks/${{ env.SUBNETWORK_NAME }} \
               --network-tier=PREMIUM \
               --service-account=vm-service-account@dev-gcp-414704.iam.gserviceaccount.com \
-              --scopes=cloud_platform \
+              --scopes=https://www.googleapis.com/auth/cloud-platform \
               --metadata=startup-script="${METADATA}"
 
     - name:  Managed Instance Group with new instance templae
