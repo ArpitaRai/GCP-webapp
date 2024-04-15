@@ -9,8 +9,8 @@ const { expect } = chai;
 const request = supertest(app);
 
 describe('User API Endpoint Tests', () => {
-  const userSelfEndpoint = '/v1/user/self';
-  const postUserEndpoint = '/v1/user';
+  const userSelfEndpoint = '/v2/user/self';
+  const postUserEndpoint = '/v2/user';
   const testUserEmail = 'testuser2@gmail.com';
   const testUserPassword = 'password';
   let authCredentials;
