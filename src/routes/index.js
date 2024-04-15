@@ -3,7 +3,7 @@ import userRoute from './user-route.js';
 
 const routes = (app) => {
   // Include other routes if any
-  app.use('/v1/user', userRoute);
+  app.use('/v2/user', userRoute);
   app.use('/', healthzRoute);
 };
 
